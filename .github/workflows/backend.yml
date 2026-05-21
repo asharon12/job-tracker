@@ -1,4 +1,4 @@
-name: Backend CI/CD
+name: Backend CI
 
 on:
   push:
@@ -32,14 +32,3 @@ jobs:
 
       - name: Type check
         run: npx tsc --noEmit
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    steps:
-      - name: Trigger Render deploy
-        run: |
-          curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" | \
-          python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('deploy',{}).get('id','triggered'))"
