@@ -182,7 +182,6 @@ function RoundRow({
   onUpdate: (data: Partial<InterviewRound>) => void;
   onDelete: () => void;
 }) {
-  const [editing, setEditing] = useState(false);
   const [outcome, setOutcome] = useState<RoundOutcome>(round.outcome);
 
   const handleOutcomeChange = (val: RoundOutcome) => {
