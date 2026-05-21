@@ -1,12 +1,14 @@
-import { Bell } from 'lucide-react';
+import { Bell, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import NotificationPanel from '../notifications/NotificationPanel';
 import { useNotifications } from '../../hooks/useNotifications';
 import { useAuthStore } from '../../store/auth.store';
+import { useThemeStore } from '../../store/theme.store';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const user = useAuthStore((s) => s.user);
+  const { isDark, toggle } = useThemeStore();
   const { data: notifications = [] } = useNotifications();
   const unread = notifications.filter((n) => !n.isRead).length;
 
@@ -15,6 +17,13 @@ export default function Navbar() {
       <div />
       <div className="flex items-center gap-4">
         <span className="text-sm text-[#8b90a7]">{user?.name}</span>
+        <button
+          onClick={toggle}
+          className="p-2 rounded-lg hover:bg-[#21253a] text-[#8b90a7] hover:text-white transition-colors"
+          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {isDark ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
         <div className="relative">
           <button
             onClick={() => setOpen((o) => !o)}

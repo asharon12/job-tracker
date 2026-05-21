@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+:root,
+[data-theme="dark"] {
+  --bg-base:     #0f1117;
+  --bg-surface:  #1a1d27;
+  --bg-elevated: #21253a;
+  --border:      #2e3248;
+  --text:        #e8eaf0;
+  --text-muted:  #8b90a7;
+}
+
+[data-theme="light"] {
+  --bg-base:     #f0f2f8;
+  --bg-surface:  #ffffff;
+  --bg-elevated: #e8eaf0;
+  --border:      #d1d5e0;
+  --text:        #1a1d27;
+  --text-muted:  #6b7280;
+}
+
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
@@ -7,10 +26,11 @@
 
   body {
     margin: 0;
-    background-color: #0f1117;
-    color: #e8eaf0;
+    background-color: var(--bg-base);
+    color: var(--text);
     font-family: 'Segoe UI', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s, color 0.2s;
   }
 
   #root {

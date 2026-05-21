@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Component } from 'react';
+import { Component, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useAuthStore } from './store/auth.store';
+import { useThemeStore, applyTheme } from './store/theme.store';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -34,7 +35,7 @@ function ProtectedLayout() {
   const token = useAuthStore((s) => s.token);
   if (!token) return <Navigate to="/login" replace />;
   return (
-    <div className="flex h-screen bg-[#0f1117]">
+    <div className="flex h-screen" style={{ background: 'var(--bg-base)' }}>
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
@@ -48,6 +49,8 @@ function ProtectedLayout() {
 
 export default function App() {
   const token = useAuthStore((s) => s.token);
+  const isDark = useThemeStore((s) => s.isDark);
+  useEffect(() => { applyTheme(isDark); }, [isDark]);
   return (
     <ErrorBoundary>
       <QueryClientProvider client={qc}>
