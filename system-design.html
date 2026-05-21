@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Tracker — System Design</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #21253a;
+      --border: #2e3248;
+      --accent: #6c63ff;
+      --accent2: #4ecdc4;
+      --accent3: #f7b731;
+      --text: #e8eaf0;
+      --muted: #8b90a7;
+      --green: #51cf66;
+      --red: #ff6b6b;
+      --blue: #339af0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 48px 24px;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 56px;
+    }
+    .header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .header h1 span {
+      color: var(--accent);
+    }
+    .header p {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 1rem;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.3px;
+    }
+    .badge.accent { border-color: var(--accent); color: var(--accent); }
+    .badge.green  { border-color: var(--green);  color: var(--green); }
+    .badge.blue   { border-color: var(--blue);   color: var(--blue); }
+    .badge.yellow { border-color: var(--accent3); color: var(--accent3); }
+    .badge.teal   { border-color: var(--accent2); color: var(--accent2); }
+
+    /* Section */
+    section {
+      margin-bottom: 52px;
+    }
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    /* Architecture diagram */
+    .arch {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .arch-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 28px;
+      text-align: center;
+      min-width: 260px;
+    }
+    .arch-box .label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .arch-box .title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .arch-box .sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .arch-box.client  { border-color: var(--accent);  }
+    .arch-box.server  { border-color: var(--accent2); }
+    .arch-box.db      { border-color: var(--green);   }
+    .arch-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 0;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+    .arch-arrow .line {
+      width: 2px;
+      height: 20px;
+      background: var(--border);
+    }
+    .arch-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .arch-leaf {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 20px;
+      text-align: center;
+      min-width: 140px;
+    }
+    .arch-leaf .label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+    .arch-leaf .title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .arch-leaf.db-leaf     { border-color: var(--green);   }
+    .arch-leaf.cloud-leaf  { border-color: var(--blue);    }
+    .arch-leaf.ai-leaf     { border-color: var(--accent3); }
+    .arch-leaf.cron-leaf   { border-color: var(--red);     }
+
+    /* API table */
+    .api-group {
+      margin-bottom: 28px;
+    }
+    .api-group-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+    .api-route {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      margin-bottom: 4px;
+      background: var(--surface);
+    }
+    .api-route:hover { border-color: var(--border); }
+    .method {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      width: 46px;
+      text-align: center;
+      padding: 2px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .method.get    { background: #1a3a2a; color: var(--green); }
+    .method.post   { background: #1a2a3a; color: var(--blue); }
+    .method.put    { background: #2a2a1a; color: var(--accent3); }
+    .method.patch  { background: #2a1a2a; color: #c084fc; }
+    .method.delete { background: #2a1a1a; color: var(--red); }
+    .route-path {
+      font-family: 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      color: var(--text);
+      flex: 1;
+    }
+    .route-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* Two-col grid */
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+    .card h3 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card h3 .icon {
+      font-size: 1rem;
+    }
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .card ul li {
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card ul li:last-child { border-bottom: none; }
+    .card ul li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* State table */
+    .state-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .state-table th {
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .state-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .state-table tr:last-child td { border-bottom: none; }
+    .state-table td:first-child { font-weight: 600; color: var(--accent); }
+    .state-table td code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      background: var(--surface2);
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: var(--accent2);
+    }
+
+    /* Flow */
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .flow-text {
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+    .flow-text strong { color: #fff; }
+
+    /* File tree */
+    .tree {
+      font-family: 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.83rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+    .tree .dir  { color: var(--accent2); font-weight: 600; }
+    .tree .file { color: var(--text); }
+    .tree .note { color: var(--muted); font-style: italic; }
+
+    /* Notif triggers */
+    .trigger-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .trigger-row:last-child { border-bottom: none; }
+    .trigger-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .trigger-title { font-size: 0.92rem; font-weight: 600; color: #fff; }
+    .trigger-desc  { font-size: 0.83rem; color: var(--muted); margin-top: 3px; }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Job Tracker <span>System Design</span></h1>
+    <p>Full-stack multi-user SaaS for tracking job applications end-to-end.</p>
+    <div class="badge-row">
+      <span class="badge accent">React + Vite</span>
+      <span class="badge teal">Express + TypeScript</span>
+      <span class="badge green">PostgreSQL + Prisma</span>
+      <span class="badge blue">Cloudinary</span>
+      <span class="badge yellow">Gemini AI</span>
+      <span class="badge">JWT Auth</span>
+      <span class="badge">node-cron</span>
+    </div>
+  </div>
+
+  <!-- Architecture -->
+  <section>
+    <div class="section-title">Architecture</div>
+    <div class="arch">
+      <div class="arch-box client">
+        <div class="label">Client</div>
+        <div class="title">React + Vite SPA</div>
+        <div class="sub">Table · Dashboard · Calendar · Notification Bell</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="line"></div>
+        <span>HTTPS · JWT Bearer</span>
+        <div class="line"></div>
+      </div>
+      <div class="arch-box server">
+        <div class="label">API Server</div>
+        <div class="title">Express + TypeScript</div>
+        <div class="sub">Routes → Auth Middleware → Controllers</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+      <div class="arch-row">
+        <div class="arch-leaf db-leaf">
+          <div class="label">Database</div>
+          <div class="title">PostgreSQL</div>
+        </div>
+        <div class="arch-leaf cloud-leaf">
+          <div class="label">Storage</div>
+          <div class="title">Cloudinary</div>
+        </div>
+        <div class="arch-leaf ai-leaf">
+          <div class="label">AI</div>
+          <div class="title">Gemini 1.5 Flash</div>
+        </div>
+        <div class="arch-leaf cron-leaf">
+          <div class="label">Scheduler</div>
+          <div class="title">node-cron</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Models -->
+  <section>
+    <div class="section-title">Data Models</div>
+    <div class="grid2">
+      <div class="card">
+        <h3><span class="icon">👤</span> User</h3>
+        <ul>
+          <li>id, name, email, passwordHash</li>
+          <li>createdAt</li>
+          <li>→ applications, resumes, notifications</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon">📋</span> Application</h3>
+        <ul>
+          <li>companyName, jobTitle, jobUrl</li>
+          <li>status: APPLIED · SCREENING · INTERVIEW · OFFER · REJECTED · GHOSTED</li>
+          <li>jdRaw, jdSummary (JSON)</li>
+          <li>salaryMin, salaryMax, salaryCurrency</li>
+          <li>workLocation: REMOTE · HYBRID · ONSITE</li>
+          <li>hasReferral, refereeName, refereeRole, refereeCompany, refereeLinkedin</li>
+          <li>appliedDate, deadlineDate, notes</li>
+          <li>→ resume, interviewRounds, notifications</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon">📄</span> Resume</h3>
+        <ul>
+          <li>name, fileUrl, fileName</li>
+          <li>uploadedAt</li>
+          <li>→ applications</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon">🎯</span> InterviewRound</h3>
+        <ul>
+          <li>roundNumber, roundType</li>
+          <li>type: HR_SCREEN · OA · DSA · SYSTEM_DESIGN · BEHAVIORAL · CASE_STUDY · OTHER</li>
+          <li>scheduledDate, notes</li>
+          <li>outcome: PENDING · PASSED · FAILED · CANCELLED</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon">🔔</span> Notification</h3>
+        <ul>
+          <li>type: DEADLINE_REMINDER · FOLLOW_UP</li>
+          <li>message, isRead</li>
+          <li>triggerDate, createdAt</li>
+          <li>→ user, application</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- API Routes -->
+  <section>
+    <div class="section-title">API Routes</div>
+
+    <div class="api-group">
+      <div class="api-group-title">Auth</div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/auth/register</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/auth/login</span></div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/auth/me</span></div>
+    </div>
+
+    <div class="api-group">
+      <div class="api-group-title">Applications</div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/applications</span><span class="route-note">?status= &search= &page= &limit=</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/applications</span></div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/applications/:id</span></div>
+      <div class="api-route"><span class="method put">PUT</span><span class="route-path">/api/applications/:id</span></div>
+      <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/applications/:id</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/applications/:id/summarize-jd</span><span class="route-note">Gemini AI</span></div>
+    </div>
+
+    <div class="api-group">
+      <div class="api-group-title">Interview Rounds</div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/applications/:appId/rounds</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/applications/:appId/rounds</span></div>
+      <div class="api-route"><span class="method put">PUT</span><span class="route-path">/api/applications/:appId/rounds/:roundId</span></div>
+      <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/applications/:appId/rounds/:roundId</span></div>
+    </div>
+
+    <div class="api-group">
+      <div class="api-group-title">Resumes</div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/resumes</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/resumes</span><span class="route-note">multipart/form-data</span></div>
+      <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/resumes/:id</span></div>
+    </div>
+
+    <div class="api-group">
+      <div class="api-group-title">Notifications</div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/notifications</span></div>
+      <div class="api-route"><span class="method patch">PATCH</span><span class="route-path">/api/notifications/:id/read</span></div>
+      <div class="api-route"><span class="method patch">PATCH</span><span class="route-path">/api/notifications/read-all</span></div>
+      <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/notifications/:id</span></div>
+    </div>
+
+    <div class="api-group">
+      <div class="api-group-title">Stats</div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/stats</span><span class="route-note">pipeline · activity · response rate · salary</span></div>
+    </div>
+  </section>
+
+  <!-- Notification System -->
+  <section>
+    <div class="section-title">Notification System</div>
+    <div class="card">
+      <div class="flow">
+        <div class="trigger-row">
+          <div class="trigger-icon">⏰</div>
+          <div>
+            <div class="trigger-title">Deadline Reminder</div>
+            <div class="trigger-desc">Fires N days before <code style="font-family:monospace;font-size:0.8rem;background:#21253a;padding:2px 6px;border-radius:4px;color:#4ecdc4">deadlineDate</code>. Cron checks daily at 8 AM. Deduplication ensures one notification per application per trigger window.</div>
+          </div>
+        </div>
+        <div class="trigger-row">
+          <div class="trigger-icon">📅</div>
+          <div>
+            <div class="trigger-title">Interview Day Reminder</div>
+            <div class="trigger-desc">Fires on the day of a scheduled <code style="font-family:monospace;font-size:0.8rem;background:#21253a;padding:2px 6px;border-radius:4px;color:#4ecdc4">InterviewRound.scheduledDate</code>. Cron checks daily at 8 AM.</div>
+          </div>
+        </div>
+        <div class="trigger-row">
+          <div class="trigger-icon">🔔</div>
+          <div>
+            <div class="trigger-title">Delivery</div>
+            <div class="trigger-desc">In-app only. Stored in DB. Frontend fetches on page load. Bell icon shows unread badge count. Clicking marks as read.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Data Flows -->
+  <section>
+    <div class="section-title">Key Data Flows</div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Create Application + JD Summary</h3>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">User fills form → <strong>POST /api/applications</strong></div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">User pastes JD text → <strong>POST /api/applications/:id/summarize-jd</strong></div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Gemini returns structured JSON (skills, responsibilities, tech stack, work location)</div></div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">Saved to <strong>jdSummary</strong> column → rendered as bullet points in table row</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Resume Upload</h3>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text"><strong>POST /api/resumes</strong> with multipart/form-data</div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">multer streams file → Cloudinary stores PDF</div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">DB stores <strong>fileUrl</strong>, <strong>fileName</strong>, <strong>name</strong> linked to user</div></div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">User links resume to an application via <strong>resumeId</strong> on create/edit</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Notification Flow</h3>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">Cron fires daily at 8 AM → checks deadlines and interview dates across all users</div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Writes <strong>Notification</strong> rows to DB (deduplicated)</div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Frontend fetches <strong>GET /api/notifications</strong> on page load</div></div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">Bell badge shows unread count; click to mark as read</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Auth Flow</h3>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">Register / Login → server returns <strong>JWT token</strong></div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Token stored in <strong>Zustand</strong> (persisted to localStorage)</div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Every API request sends <strong>Authorization: Bearer &lt;token&gt;</strong></div></div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">Auth middleware validates token, attaches <strong>userId</strong> to request</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Backend File Structure -->
+  <section>
+    <div class="section-title">Backend File Structure</div>
+    <div class="tree">
+<span class="dir">backend/src/</span><br>
+&nbsp;&nbsp;<span class="file">index.ts</span>                       <span class="note">← Express app bootstrap + cron scheduler</span><br>
+&nbsp;&nbsp;<span class="dir">routes/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.routes.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">application.routes.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">round.routes.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">resume.routes.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">notification.routes.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">stats.routes.ts</span><br>
+&nbsp;&nbsp;<span class="dir">controllers/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.controller.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">application.controller.ts</span>  <span class="note">← JD summarize via Gemini</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">round.controller.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">resume.controller.ts</span>       <span class="note">← Cloudinary upload via multer</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">notification.controller.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">stats.controller.ts</span><br>
+&nbsp;&nbsp;<span class="dir">middleware/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.ts</span>                       <span class="note">← JWT verification</span><br>
+&nbsp;&nbsp;<span class="dir">lib/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">prisma.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">cloudinary.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">notifications.ts</span>            <span class="note">← cron logic: deadline + interview triggers</span><br>
+&nbsp;&nbsp;<span class="dir">types/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">index.ts</span>                      <span class="note">← AuthRequest interface</span>
+    </div>
+  </section>
+
+  <!-- Frontend File Structure -->
+  <section>
+    <div class="section-title">Frontend File Structure</div>
+    <div class="tree">
+<span class="dir">frontend/src/</span><br>
+&nbsp;&nbsp;<span class="file">main.tsx</span><br>
+&nbsp;&nbsp;<span class="file">App.tsx</span>                        <span class="note">← React Router routes + layout wrapper</span><br>
+&nbsp;&nbsp;<span class="dir">lib/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">api.ts</span>                        <span class="note">← axios instance with base URL + JWT interceptor</span><br>
+&nbsp;&nbsp;<span class="dir">store/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.store.ts</span>                 <span class="note">← Zustand: token, user, login/logout</span><br>
+&nbsp;&nbsp;<span class="dir">hooks/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useApplications.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useNotifications.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useStats.ts</span><br>
+&nbsp;&nbsp;<span class="dir">pages/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">LoginPage.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">RegisterPage.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">DashboardPage.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationsPage.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationDetailPage.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">CalendarPage.tsx</span><br>
+&nbsp;&nbsp;<span class="dir">components/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">layout/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Navbar.tsx</span>                  <span class="note">← includes NotificationBell</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Sidebar.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">applications/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationTable.tsx</span>        <span class="note">← main tabular view</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationForm.tsx</span>         <span class="note">← create / edit modal</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationDetail.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">JDSummary.tsx</span>               <span class="note">← renders JD bullet points</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">dashboard/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">PipelineFunnel.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ActivityChart.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ResponseRateCard.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">SalaryChart.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">calendar/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">CalendarView.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">notifications/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">NotificationBell.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">ui/</span>                             <span class="note">← Button, Modal, Badge, etc.</span>
+    </div>
+  </section>
+
+  <!-- Frontend State Strategy -->
+  <section>
+    <div class="section-title">Frontend State Strategy</div>
+    <div class="card">
+      <table class="state-table">
+        <thead>
+          <tr><th>Concern</th><th>Tool</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Auth</td><td><code>Zustand</code></td><td>Token + user persisted to localStorage</td></tr>
+          <tr><td>Server data</td><td><code>React Query</code></td><td>Caching, background refetch, invalidation on mutations</td></tr>
+          <tr><td>Routing</td><td><code>React Router v6</code></td><td>Protected routes guard unauthenticated access</td></tr>
+          <tr><td>Forms</td><td><code>React Hook Form + Zod</code></td><td>Client-side validation mirrors backend Zod schemas</td></tr>
+          <tr><td>Charts</td><td><code>Recharts</code></td><td>Pipeline funnel, activity line chart, salary distribution</td></tr>
+          <tr><td>Calendar</td><td><code>react-big-calendar</code></td><td>Interview rounds and deadlines as events</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
