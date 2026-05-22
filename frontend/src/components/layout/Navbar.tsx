@@ -1,4 +1,4 @@
-import { Bell, Sun, Moon } from 'lucide-react';
+import { Bell, Sun, Moon, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import NotificationPanel from '../notifications/NotificationPanel';
 import { useNotifications } from '../../hooks/useNotifications';
@@ -8,18 +8,20 @@ import { useThemeStore } from '../../store/theme.store';
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   const { isDark, toggle } = useThemeStore();
   const { data: notifications = [] } = useNotifications();
   const unread = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <header className="h-14 bg-[#1a1d27] border-b border-[#2e3248] flex items-center justify-between px-6 sticky top-0 z-10">
-      <div />
-      <div className="flex items-center gap-4">
-        <span className="text-sm text-[#8b90a7]">{user?.name}</span>
+    <header className="h-14 bg-[var(--bg-surface)] border-b border-[var(--border)] flex items-center justify-between px-4 md:px-6 sticky top-0 z-10">
+      <span className="md:hidden font-bold text-[var(--text)] tracking-tight">JobTracker</span>
+      <div className="hidden md:block" />
+      <div className="flex items-center gap-2 md:gap-4">
+        <span className="hidden md:block text-sm text-[var(--text-muted)]">{user?.name}</span>
         <button
           onClick={toggle}
-          className="p-2 rounded-lg hover:bg-[#21253a] text-[#8b90a7] hover:text-white transition-colors"
+          className="p-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
           title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
           {isDark ? <Sun size={18} /> : <Moon size={18} />}
@@ -27,7 +29,7 @@ export default function Navbar() {
         <div className="relative">
           <button
             onClick={() => setOpen((o) => !o)}
-            className="relative p-2 rounded-lg hover:bg-[#21253a] text-[#8b90a7] hover:text-white transition-colors"
+            className="relative p-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
           >
             <Bell size={18} />
             {unread > 0 && (
@@ -38,6 +40,13 @@ export default function Navbar() {
           </button>
           {open && <NotificationPanel onClose={() => setOpen(false)} />}
         </div>
+        <button
+          onClick={logout}
+          className="md:hidden p-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-red-400 transition-colors"
+          title="Sign out"
+        >
+          <LogOut size={18} />
+        </button>
       </div>
     </header>
   );

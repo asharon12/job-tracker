@@ -11,12 +11,12 @@
 }
 
 [data-theme="light"] {
-  --bg-base:     #f0f2f8;
+  --bg-base:     #f0f0ff;
   --bg-surface:  #ffffff;
-  --bg-elevated: #e8eaf0;
-  --border:      #d1d5e0;
-  --text:        #1a1d27;
-  --text-muted:  #6b7280;
+  --bg-elevated: #e8e8ff;
+  --border:      #d4d4f0;
+  --text:        #111827;
+  --text-muted:  #5b6278;
 }
 
 @layer base {

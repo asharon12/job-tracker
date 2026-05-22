@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { z } from 'zod';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../types';
+import { generateNotificationsForApplication } from '../lib/notifications';
 
 const roundSchema = z.object({
   roundType: z.enum(['HR_SCREEN', 'OA', 'DSA', 'SYSTEM_DESIGN', 'BEHAVIORAL', 'CASE_STUDY', 'OTHER']),
@@ -57,6 +58,7 @@ export const addRound = async (req: AuthRequest, res: Response): Promise<void> =
     },
   });
 
+  await generateNotificationsForApplication(req.params.applicationId, req.userId!);
   res.status(201).json(round);
 };
 
@@ -93,6 +95,7 @@ export const updateRound = async (req: AuthRequest, res: Response): Promise<void
     },
   });
 
+  await generateNotificationsForApplication(req.params.applicationId, req.userId!);
   res.json(updated);
 };
 
@@ -125,5 +128,6 @@ export const deleteRound = async (req: AuthRequest, res: Response): Promise<void
     });
   }
 
+  await generateNotificationsForApplication(req.params.applicationId, req.userId!);
   res.status(204).send();
 };

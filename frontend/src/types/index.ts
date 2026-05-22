@@ -1,8 +1,7 @@
-export type ApplicationStatus = 'APPLIED' | 'SCREENING' | 'INTERVIEW' | 'OFFER' | 'REJECTED' | 'GHOSTED';
-export type WorkLocation = 'REMOTE' | 'HYBRID' | 'ONSITE';
+export type ApplicationStatus = 'APPLIED' | 'AWAITING_REFERRAL' | 'SCREENING' | 'INTERVIEW' | 'OFFER' | 'REJECTED' | 'GHOSTED';
 export type RoundType = 'HR_SCREEN' | 'OA' | 'DSA' | 'SYSTEM_DESIGN' | 'BEHAVIORAL' | 'CASE_STUDY' | 'OTHER';
 export type RoundOutcome = 'PENDING' | 'PASSED' | 'FAILED' | 'CANCELLED';
-export type NotificationType = 'DEADLINE_REMINDER' | 'FOLLOW_UP';
+export type NotificationType = 'FOLLOW_UP' | 'AWAITING_REFERRAL_REMINDER';
 
 export interface Resume {
   id: string;
@@ -23,15 +22,6 @@ export interface InterviewRound {
   createdAt: string;
 }
 
-export interface JDSummary {
-  required_skills: string[];
-  nice_to_have: string[];
-  responsibilities: string[];
-  experience_required: string;
-  tech_stack: string[];
-  work_location: string;
-}
-
 export interface Application {
   id: string;
   userId: string;
@@ -40,7 +30,6 @@ export interface Application {
   jobUrl: string | null;
   status: ApplicationStatus;
   jdRaw: string | null;
-  jdSummary: JDSummary | null;
   resumeId: string | null;
   resume: { id: string; name: string; fileUrl?: string } | null;
   hasReferral: boolean;
@@ -49,11 +38,10 @@ export interface Application {
   refereeCompany: string | null;
   refereeLinkedin: string | null;
   salaryMin: number | null;
-  salaryMax: number | null;
   salaryCurrency: string;
-  workLocation: WorkLocation | null;
+  workLocation: string | null;
+  resumeName: string | null;
   appliedDate: string | null;
-  deadlineDate: string | null;
   notes: string | null;
   createdAt: string;
   updatedAt: string;
@@ -77,5 +65,5 @@ export interface Stats {
   pipeline: Record<ApplicationStatus, number>;
   responseRate: number;
   activity: { week: string; count: number }[];
-  salaryApps: { min: number | null; max: number | null; currency: string }[];
+  salaryApps: { min: number | null; currency: string }[];
 }

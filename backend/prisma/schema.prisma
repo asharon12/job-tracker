@@ -38,7 +38,6 @@ model Application {
   jobUrl          String?
   status          ApplicationStatus @default(APPLIED)
   jdRaw           String?
-  jdSummary       Json?
   resumeId        String?
   resume          Resume?           @relation(fields: [resumeId], references: [id])
   hasReferral     Boolean           @default(false)
@@ -47,11 +46,10 @@ model Application {
   refereeCompany  String?
   refereeLinkedin String?
   salaryMin       Float?
-  salaryMax       Float?
   salaryCurrency  String?           @default("USD")
-  workLocation    WorkLocation?
+  workLocation    String?
+  resumeName      String?
   appliedDate     DateTime?
-  deadlineDate    DateTime?
   notes           String?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -61,17 +59,12 @@ model Application {
 
 enum ApplicationStatus {
   APPLIED
+  AWAITING_REFERRAL
   SCREENING
   INTERVIEW
   OFFER
   REJECTED
   GHOSTED
-}
-
-enum WorkLocation {
-  REMOTE
-  HYBRID
-  ONSITE
 }
 
 model InterviewRound {
@@ -117,6 +110,6 @@ model Notification {
 }
 
 enum NotificationType {
-  DEADLINE_REMINDER
   FOLLOW_UP
+  AWAITING_REFERRAL_REMINDER
 }

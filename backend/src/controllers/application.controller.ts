@@ -1,6 +1,5 @@
 import { Response } from 'express';
 import { z } from 'zod';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../types';
 import { generateNotificationsForApplication } from '../lib/notifications';
@@ -8,29 +7,36 @@ import { generateNotificationsForApplication } from '../lib/notifications';
 const appSchema = z.object({
   companyName: z.string().min(1),
   jobTitle: z.string().min(1),
-  jobUrl: z.string().url().optional().or(z.literal('')),
-  status: z.enum(['APPLIED', 'SCREENING', 'INTERVIEW', 'OFFER', 'REJECTED', 'GHOSTED']).optional(),
-  jdRaw: z.string().optional(),
-  resumeId: z.string().uuid().optional().nullable(),
+  jobUrl: z.string().url().optional().nullable().or(z.literal('')),
+  status: z.enum(['APPLIED', 'AWAITING_REFERRAL', 'SCREENING', 'INTERVIEW', 'OFFER', 'REJECTED', 'GHOSTED']).optional(),
+  jdRaw: z.string().optional().nullable(),
+  resumeId: z.string().uuid().optional().nullable().or(z.literal('')),
   hasReferral: z.boolean().optional(),
   refereeName: z.string().optional().nullable(),
   refereeRole: z.string().optional().nullable(),
   refereeCompany: z.string().optional().nullable(),
   refereeLinkedin: z.string().optional().nullable(),
-  salaryMin: z.number().optional().nullable(),
-  salaryMax: z.number().optional().nullable(),
+  salaryMin: z.preprocess((v) => (v === null || v === undefined || (typeof v === 'number' && isNaN(v)) ? null : v), z.number().optional().nullable()),
   salaryCurrency: z.string().optional(),
-  workLocation: z.enum(['REMOTE', 'HYBRID', 'ONSITE']).optional().nullable(),
+  workLocation: z.string().optional().nullable(),
+  resumeName: z.string().optional().nullable(),
   appliedDate: z.string().optional().nullable(),
-  deadlineDate: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
 });
 
+const ARCHIVED_STATUSES = ['REJECTED', 'GHOSTED'];
+
 export const getApplications = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { status, search, page = '1', limit = '20' } = req.query as Record<string, string>;
+  const { status, search, page = '1', limit = '20', archived = 'false' } = req.query as Record<string, string>;
 
   const where: Record<string, unknown> = { userId: req.userId };
-  if (status) where.status = status;
+  if (archived === 'true') {
+    where.status = { in: ARCHIVED_STATUSES };
+  } else if (status) {
+    where.status = status;
+  } else {
+    where.status = { notIn: ARCHIVED_STATUSES };
+  }
   if (search) {
     where.OR = [
       { companyName: { contains: search, mode: 'insensitive' } },
@@ -97,11 +103,10 @@ export const createApplication = async (req: AuthRequest, res: Response): Promis
       refereeCompany: data.refereeCompany || null,
       refereeLinkedin: data.refereeLinkedin || null,
       salaryMin: data.salaryMin ?? null,
-      salaryMax: data.salaryMax ?? null,
       salaryCurrency: data.salaryCurrency || 'USD',
       workLocation: data.workLocation || null,
+      resumeName: data.resumeName || null,
       appliedDate: data.appliedDate ? new Date(data.appliedDate) : null,
-      deadlineDate: data.deadlineDate ? new Date(data.deadlineDate) : null,
       notes: data.notes || null,
     },
     include: {
@@ -145,11 +150,10 @@ export const updateApplication = async (req: AuthRequest, res: Response): Promis
       ...(data.refereeCompany !== undefined && { refereeCompany: data.refereeCompany }),
       ...(data.refereeLinkedin !== undefined && { refereeLinkedin: data.refereeLinkedin }),
       ...(data.salaryMin !== undefined && { salaryMin: data.salaryMin }),
-      ...(data.salaryMax !== undefined && { salaryMax: data.salaryMax }),
       ...(data.salaryCurrency !== undefined && { salaryCurrency: data.salaryCurrency }),
       ...(data.workLocation !== undefined && { workLocation: data.workLocation }),
+      ...(data.resumeName !== undefined && { resumeName: data.resumeName }),
       ...(data.appliedDate !== undefined && { appliedDate: data.appliedDate ? new Date(data.appliedDate) : null }),
-      ...(data.deadlineDate !== undefined && { deadlineDate: data.deadlineDate ? new Date(data.deadlineDate) : null }),
       ...(data.notes !== undefined && { notes: data.notes }),
     },
     include: {
@@ -174,53 +178,3 @@ export const deleteApplication = async (req: AuthRequest, res: Response): Promis
   res.status(204).send();
 };
 
-export const summarizeJD = async (req: AuthRequest, res: Response): Promise<void> => {
-  const app = await prisma.application.findFirst({
-    where: { id: req.params.id, userId: req.userId },
-  });
-  if (!app) {
-    res.status(404).json({ error: 'Application not found' });
-    return;
-  }
-  if (!app.jdRaw) {
-    res.status(400).json({ error: 'No job description text to summarize' });
-    return;
-  }
-
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-  const prompt = `You are a job description analyzer. Extract structured information from the following job description and return ONLY valid JSON matching this exact schema:
-{
-  "required_skills": ["string"],
-  "nice_to_have": ["string"],
-  "responsibilities": ["string"],
-  "experience_required": "string",
-  "tech_stack": ["string"],
-  "work_location": "Remote | Hybrid | Onsite | Not specified"
-}
-
-Keep each array item concise (under 15 words). Return only the JSON, no markdown, no explanation.
-
-Job Description:
-${app.jdRaw}`;
-
-  const result = await model.generateContent(prompt);
-  const text = result.response.text().trim();
-
-  let summary: unknown;
-  try {
-    const cleaned = text.replace(/^```json\n?/, '').replace(/\n?```$/, '');
-    summary = JSON.parse(cleaned);
-  } catch {
-    res.status(500).json({ error: 'Failed to parse AI response' });
-    return;
-  }
-
-  const updated = await prisma.application.update({
-    where: { id: req.params.id },
-    data: { jdSummary: summary as object },
-  });
-
-  res.json({ jdSummary: updated.jdSummary });
-};

@@ -1,7 +1,5 @@
 import prisma from './prisma';
 
-const DEADLINE_REMINDER_DAYS_BEFORE = 3;
-
 export const generateNotificationsForApplication = async (
   applicationId: string,
   userId: string
@@ -12,47 +10,62 @@ export const generateNotificationsForApplication = async (
   });
   if (!app) return;
 
+  const now = new Date();
+
+  // Always regenerate interview reminders from current rounds
   await prisma.notification.deleteMany({
-    where: { applicationId, isRead: false, triggerDate: { gt: new Date() } },
+    where: { applicationId, isRead: false, triggerDate: { gt: now }, type: 'FOLLOW_UP' },
   });
 
   const notifications: {
     userId: string;
     applicationId: string;
-    type: 'DEADLINE_REMINDER' | 'FOLLOW_UP';
+    type: 'FOLLOW_UP' | 'AWAITING_REFERRAL_REMINDER';
     message: string;
     triggerDate: Date;
   }[] = [];
 
-  if (app.deadlineDate) {
-    const triggerDate = new Date(app.deadlineDate);
-    triggerDate.setDate(triggerDate.getDate() - DEADLINE_REMINDER_DAYS_BEFORE);
-    if (triggerDate > new Date()) {
-      notifications.push({
-        userId,
-        applicationId,
-        type: 'DEADLINE_REMINDER',
-        message: `Application deadline for ${app.companyName} — ${app.jobTitle} is in ${DEADLINE_REMINDER_DAYS_BEFORE} days.`,
-        triggerDate,
-      });
-    }
-  }
-
+  // 12 hours before each scheduled interview round
   for (const round of app.interviewRounds) {
-    if (round.scheduledDate && round.scheduledDate > new Date()) {
-      const triggerDate = new Date(round.scheduledDate);
-      triggerDate.setHours(8, 0, 0, 0);
-      notifications.push({
-        userId,
-        applicationId,
-        type: 'FOLLOW_UP',
-        message: `You have a ${round.roundType.replace(/_/g, ' ')} interview at ${app.companyName} today (Round ${round.roundNumber}).`,
-        triggerDate,
-      });
+    if (round.scheduledDate) {
+      const triggerDate = new Date(round.scheduledDate.getTime() - 12 * 60 * 60 * 1000);
+      if (triggerDate > now) {
+        notifications.push({
+          userId,
+          applicationId,
+          type: 'FOLLOW_UP',
+          message: `Reminder: ${round.roundType.replace(/_/g, ' ')} interview at ${app.companyName} in 12 hours (Round ${round.roundNumber}).`,
+          triggerDate,
+        });
+      }
     }
   }
 
   if (notifications.length > 0) {
     await prisma.notification.createMany({ data: notifications });
+  }
+
+  // 48 hours after status set to AWAITING_REFERRAL — only create if none exists yet
+  if (app.status === 'AWAITING_REFERRAL') {
+    const existing = await prisma.notification.findFirst({
+      where: { applicationId, type: 'AWAITING_REFERRAL_REMINDER', isRead: false, triggerDate: { gt: now } },
+    });
+    if (!existing) {
+      const triggerDate = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+      await prisma.notification.create({
+        data: {
+          userId,
+          applicationId,
+          type: 'AWAITING_REFERRAL_REMINDER',
+          message: `No update in 48 hours: ${app.companyName} — ${app.jobTitle} is still awaiting referral.`,
+          triggerDate,
+        },
+      });
+    }
+  } else {
+    // Status moved away from AWAITING_REFERRAL — cancel any pending reminder
+    await prisma.notification.deleteMany({
+      where: { applicationId, type: 'AWAITING_REFERRAL_REMINDER', isRead: false, triggerDate: { gt: now } },
+    });
   }
 };

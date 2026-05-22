@@ -5,7 +5,6 @@ import {
   createApplication,
   updateApplication,
   deleteApplication,
-  summarizeJD,
 } from '../controllers/application.controller';
 import { authenticate } from '../middleware/auth';
 
@@ -18,6 +17,5 @@ router.post('/', createApplication);
 router.get('/:id', getApplication);
 router.put('/:id', updateApplication);
 router.delete('/:id', deleteApplication);
-router.post('/:id/summarize-jd', summarizeJD);
 
 export default router;

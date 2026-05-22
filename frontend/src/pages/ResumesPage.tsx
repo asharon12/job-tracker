@@ -24,18 +24,20 @@ export default function ResumesPage() {
     if (fileRef.current) fileRef.current.value = '';
   };
 
+  const inputCls = 'bg-[var(--bg-base)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[#6c63ff]';
+
   return (
     <div className="space-y-6 max-w-2xl">
-      <h1 className="text-xl font-bold text-white">Resumes</h1>
+      <h1 className="text-xl font-bold text-[var(--text)]">Resumes</h1>
 
-      <div className="bg-[#1a1d27] border border-[#2e3248] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-white mb-4">Upload Resume</h2>
+      <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[var(--text)] mb-4">Upload Resume</h2>
         <div className="flex gap-3">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Resume name (e.g. SWE 2025)"
-            className="flex-1 bg-[#0f1117] border border-[#2e3248] rounded-lg px-3 py-2 text-sm text-white placeholder-[#8b90a7] focus:outline-none focus:border-[#6c63ff]"
+            className={`flex-1 ${inputCls}`}
           />
           <button
             onClick={() => fileRef.current?.click()}
@@ -52,16 +54,16 @@ export default function ResumesPage() {
       </div>
 
       <div className="space-y-3">
-        {isLoading && <p className="text-sm text-[#8b90a7]">Loading...</p>}
+        {isLoading && <p className="text-sm text-[var(--text-muted)]">Loading...</p>}
         {!isLoading && resumes.length === 0 && (
-          <p className="text-sm text-[#8b90a7]">No resumes uploaded yet.</p>
+          <p className="text-sm text-[var(--text-muted)]">No resumes uploaded yet.</p>
         )}
         {resumes.map((r) => (
-          <div key={r.id} className="flex items-center gap-4 bg-[#1a1d27] border border-[#2e3248] rounded-xl px-5 py-4">
+          <div key={r.id} className="flex items-center gap-4 bg-[var(--bg-surface)] border border-[var(--border)] rounded-xl px-5 py-4">
             <FileText size={20} className="text-[#6c63ff] shrink-0" />
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-white">{r.name}</div>
-              <div className="text-xs text-[#8b90a7] mt-0.5">
+              <div className="text-sm font-medium text-[var(--text)]">{r.name}</div>
+              <div className="text-xs text-[var(--text-muted)] mt-0.5">
                 {r.fileName} · Uploaded {fmtDate(r.uploadedAt)}
               </div>
             </div>
@@ -69,7 +71,7 @@ export default function ResumesPage() {
               href={r.fileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#8b90a7] hover:text-white transition-colors"
+              className="text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
             >
               <ExternalLink size={15} />
             </a>
@@ -77,7 +79,7 @@ export default function ResumesPage() {
               onClick={() => {
                 if (confirm('Delete this resume?')) deleteResume.mutate(r.id);
               }}
-              className="text-[#8b90a7] hover:text-red-400 transition-colors"
+              className="text-[var(--text-muted)] hover:text-red-400 transition-colors"
             >
               <Trash2 size={15} />
             </button>
