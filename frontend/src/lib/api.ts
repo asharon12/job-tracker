@@ -34,7 +34,10 @@ async function request<T>(
   if (res.status === 204) return undefined as T;
 
   const data = await res.json();
-  if (!res.ok) throw Object.assign(new Error(data?.error ?? 'Request failed'), { response: { data, status: res.status } });
+  if (!res.ok) {
+    const msg = typeof data?.error === 'string' ? data.error : 'Request failed';
+    throw Object.assign(new Error(msg), { response: { data, status: res.status } });
+  }
   return data as T;
 }
 

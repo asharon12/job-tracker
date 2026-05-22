@@ -26,7 +26,10 @@ export const useUpdateRound = (applicationId: string) => {
   return useMutation({
     mutationFn: ({ roundId, data }: { roundId: string; data: Partial<InterviewRound> }) =>
       api.put<InterviewRound>(`/applications/${applicationId}/rounds/${roundId}`, data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['rounds', applicationId] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['rounds', applicationId] });
+      qc.invalidateQueries({ queryKey: ['application', applicationId] });
+    },
   });
 };
 
@@ -35,6 +38,9 @@ export const useDeleteRound = (applicationId: string) => {
   return useMutation({
     mutationFn: (roundId: string) =>
       api.delete(`/applications/${applicationId}/rounds/${roundId}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['rounds', applicationId] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['rounds', applicationId] });
+      qc.invalidateQueries({ queryKey: ['application', applicationId] });
+    },
   });
 };

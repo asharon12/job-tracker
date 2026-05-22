@@ -7,6 +7,7 @@ interface ApplicationsParams {
   search?: string;
   page?: number;
   limit?: number;
+  archived?: boolean;
 }
 
 export interface ApplicationsResponse {
@@ -57,10 +58,3 @@ export const useDeleteApplication = () => {
   });
 };
 
-export const useSummarizeJD = () => {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (id: string) => api.post(`/applications/${id}/summarize-jd`),
-    onSuccess: (_data, id) => qc.invalidateQueries({ queryKey: ['application', id] }),
-  });
-};

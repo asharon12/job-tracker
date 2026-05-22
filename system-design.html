@@ -6,152 +6,70 @@
   <title>Job Tracker — Project Reference</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #21253a;
-      --border: #2e3248;
-      --accent: #6c63ff;
-      --accent2: #4ecdc4;
-      --accent3: #f7b731;
-      --text: #e8eaf0;
-      --muted: #8b90a7;
-      --green: #51cf66;
-      --red: #ff6b6b;
-      --blue: #339af0;
+      --bg: #0f1117; --surface: #1a1d27; --surface2: #21253a; --border: #2e3248;
+      --accent: #6c63ff; --accent2: #4ecdc4; --accent3: #f7b731;
+      --text: #e8eaf0; --muted: #8b90a7; --green: #51cf66; --red: #ff6b6b; --blue: #339af0;
     }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 15px; line-height: 1.6; padding: 48px 24px; }
+    .page { max-width: 980px; margin: 0 auto; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
-      padding: 48px 24px;
-    }
-
-    .page { max-width: 960px; margin: 0 auto; }
-
-    /* Nav */
-    .toc {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 24px;
-      margin-bottom: 48px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 24px;
-    }
-    .toc a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.83rem;
-      font-weight: 500;
-    }
+    /* TOC */
+    .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 24px; margin-bottom: 48px; display: flex; flex-wrap: wrap; gap: 6px 20px; }
+    .toc a { color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
     .toc a:hover { color: var(--accent); }
 
     /* Header */
-    .header { margin-bottom: 56px; }
+    .header { margin-bottom: 52px; }
     .header h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.5px; color: #fff; }
     .header h1 span { color: var(--accent); }
-    .header p { color: var(--muted); margin-top: 8px; font-size: 1rem; }
+    .header p { color: var(--muted); margin-top: 8px; font-size: 1rem; max-width: 640px; }
     .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-    .badge {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 500;
-      padding: 4px 12px;
-      border-radius: 999px;
-      letter-spacing: 0.3px;
-    }
+    .badge { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; font-weight: 500; padding: 4px 12px; border-radius: 999px; }
     .badge.accent { border-color: var(--accent); color: var(--accent); }
-    .badge.green  { border-color: var(--green);  color: var(--green); }
-    .badge.blue   { border-color: var(--blue);   color: var(--blue); }
-    .badge.yellow { border-color: var(--accent3); color: var(--accent3); }
-    .badge.teal   { border-color: var(--accent2); color: var(--accent2); }
-    .badge.red    { border-color: var(--red); color: var(--red); }
+    .badge.green  { border-color: var(--green);   color: var(--green); }
+    .badge.blue   { border-color: var(--blue);     color: var(--blue); }
+    .badge.yellow { border-color: var(--accent3);  color: var(--accent3); }
+    .badge.teal   { border-color: var(--accent2);  color: var(--accent2); }
+    .badge.red    { border-color: var(--red);       color: var(--red); }
 
     /* Section */
     section { margin-bottom: 52px; }
-    .section-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 20px;
-    }
+    .section-title { font-size: 0.72rem; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+
+    /* Cards */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; }
+    .card h3 { font-size: 0.92rem; font-weight: 600; color: #fff; margin-bottom: 12px; }
+    .card ul { list-style: none; padding: 0; }
+    .card ul li { font-size: 0.85rem; color: var(--muted); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 8px; }
+    .card ul li:last-child { border-bottom: none; }
+    .card ul li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--border); flex-shrink: 0; margin-top: 8px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
 
     /* Architecture */
-    .arch {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .arch-box {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 28px;
-      text-align: center;
-      min-width: 260px;
-    }
-    .arch-box .label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
+    .arch { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; display: flex; flex-direction: column; align-items: center; }
+    .arch-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 28px; text-align: center; min-width: 280px; }
+    .arch-box .label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
     .arch-box .title { font-size: 1rem; font-weight: 600; color: #fff; }
     .arch-box .sub   { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
     .arch-box.client { border-color: var(--accent); }
     .arch-box.server { border-color: var(--accent2); }
-    .arch-arrow {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      padding: 6px 0; color: var(--muted); font-size: 0.75rem;
-    }
+    .arch-arrow { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; color: var(--muted); font-size: 0.75rem; }
     .arch-arrow .line { width: 2px; height: 20px; background: var(--border); }
     .arch-row { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
-    .arch-leaf {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 20px;
-      text-align: center;
-      min-width: 130px;
-    }
+    .arch-leaf { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; text-align: center; min-width: 130px; }
     .arch-leaf .label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 3px; }
     .arch-leaf .title { font-size: 0.9rem; font-weight: 600; color: #fff; }
     .arch-leaf .sub   { font-size: 0.75rem; color: var(--muted); }
     .arch-leaf.db-leaf    { border-color: var(--green); }
-    .arch-leaf.cloud-leaf { border-color: var(--blue); }
     .arch-leaf.ai-leaf    { border-color: var(--accent3); }
     .arch-leaf.cron-leaf  { border-color: var(--red); }
 
-    /* Infra boxes */
-    .infra-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-    @media (max-width: 640px) { .infra-grid { grid-template-columns: 1fr; } }
-    .infra-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px 20px;
-    }
-    .infra-card .service {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
+    /* Infra cards */
+    .infra-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+    .infra-card .service { font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
     .infra-card .name  { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
     .infra-card .url   { font-size: 0.8rem; color: var(--accent); font-family: monospace; word-break: break-all; }
     .infra-card .desc  { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
@@ -162,16 +80,9 @@
     /* API */
     .api-group { margin-bottom: 28px; }
     .api-group-title { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; padding-left: 4px; }
-    .api-route {
-      display: flex; align-items: baseline; gap: 14px;
-      padding: 10px 16px; border-radius: 8px; border: 1px solid transparent;
-      margin-bottom: 4px; background: var(--surface);
-    }
+    .api-route { display: flex; align-items: baseline; gap: 14px; padding: 10px 16px; border-radius: 8px; border: 1px solid transparent; margin-bottom: 4px; background: var(--surface); }
     .api-route:hover { border-color: var(--border); }
-    .method {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px;
-      width: 46px; text-align: center; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;
-    }
+    .method { font-size: 0.72rem; font-weight: 700; width: 50px; text-align: center; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
     .method.get    { background: #1a3a2a; color: var(--green); }
     .method.post   { background: #1a2a3a; color: var(--blue); }
     .method.put    { background: #2a2a1a; color: var(--accent3); }
@@ -180,131 +91,62 @@
     .route-path { font-family: 'Fira Code', monospace; font-size: 0.88rem; color: var(--text); flex: 1; }
     .route-note { font-size: 0.8rem; color: var(--muted); flex-shrink: 0; }
 
-    /* Grid */
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
-
-    /* Card */
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; }
-    .card h3 { font-size: 0.92rem; font-weight: 600; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .card ul { list-style: none; padding: 0; }
-    .card ul li {
-      font-size: 0.85rem; color: var(--muted); padding: 5px 0;
-      border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px;
-    }
-    .card ul li:last-child { border-bottom: none; }
-    .card ul li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
-
-    /* State table */
-    .state-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    .state-table th { text-align: left; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid var(--border); }
-    .state-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text); }
-    .state-table tr:last-child td { border-bottom: none; }
-    .state-table td:first-child { font-weight: 600; color: var(--accent); }
-    .state-table td code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: var(--surface2); padding: 2px 7px; border-radius: 4px; color: var(--accent2); }
+    /* Tables */
+    .tbl { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .tbl th { text-align: left; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid var(--border); }
+    .tbl td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+    .tbl tr:last-child td { border-bottom: none; }
+    .tbl td:first-child { font-weight: 600; color: var(--accent); }
+    code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: var(--surface2); padding: 2px 7px; border-radius: 4px; color: var(--accent2); }
 
     /* Flow */
     .flow { display: flex; flex-direction: column; gap: 4px; }
     .flow-step { display: flex; align-items: flex-start; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .flow-step:last-child { border-bottom: none; }
-    .flow-num {
-      width: 24px; height: 24px; border-radius: 50%; background: var(--surface2);
-      border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
-    }
+    .flow-num { width: 24px; height: 24px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
     .flow-text { font-size: 0.88rem; color: var(--text); }
     .flow-text strong { color: #fff; }
 
-    /* CI/CD pipeline */
-    .pipeline {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-    }
-    .pipeline-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.88rem;
-    }
+    /* Notification triggers */
+    .trigger-row { display: flex; align-items: flex-start; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .trigger-row:last-child { border-bottom: none; }
+    .trigger-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; width: 28px; text-align: center; }
+    .trigger-title { font-size: 0.92rem; font-weight: 600; color: #fff; }
+    .trigger-desc  { font-size: 0.83rem; color: var(--muted); margin-top: 3px; }
+
+    /* CI/CD */
+    .pipeline { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .pipeline-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
     .pipeline-row:last-child { border-bottom: none; }
-    .p-step {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 6px 14px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #fff;
-      white-space: nowrap;
-    }
+    .p-step { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; font-size: 0.82rem; font-weight: 600; color: #fff; white-space: nowrap; }
     .p-step.green  { border-color: var(--green);  color: var(--green); }
     .p-step.blue   { border-color: var(--blue);   color: var(--blue); }
     .p-step.yellow { border-color: var(--accent3); color: var(--accent3); }
+    .p-step.teal   { border-color: var(--accent2); color: var(--accent2); }
     .p-arrow { color: var(--muted); font-size: 1rem; }
-    .p-desc { color: var(--muted); font-size: 0.82rem; flex: 1; }
 
-    /* Changelog */
-    .changelog-item {
-      display: flex;
-      gap: 16px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .changelog-item:last-child { border-bottom: none; }
-    .cl-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 999px;
-      flex-shrink: 0;
-      height: fit-content;
-      margin-top: 2px;
-    }
-    .cl-tag.fix    { background: #2a1a1a; color: var(--red); border: 1px solid var(--red); }
-    .cl-tag.feat   { background: #1a2a3a; color: var(--blue); border: 1px solid var(--blue); }
-    .cl-tag.infra  { background: #1a2a1a; color: var(--green); border: 1px solid var(--green); }
-    .cl-tag.ci     { background: #2a2a1a; color: var(--accent3); border: 1px solid var(--accent3); }
-    .cl-title  { font-size: 0.9rem; font-weight: 600; color: #fff; margin-bottom: 3px; }
-    .cl-desc   { font-size: 0.82rem; color: var(--muted); }
+    /* Bug log */
+    .bug-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .bug-item:last-child { border-bottom: none; }
+    .bug-tag { font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; flex-shrink: 0; height: fit-content; margin-top: 2px; white-space: nowrap; }
+    .bug-tag.fix   { background: #2a1a1a; color: var(--red);   border: 1px solid var(--red); }
+    .bug-tag.feat  { background: #1a2a3a; color: var(--blue);  border: 1px solid var(--blue); }
+    .bug-tag.infra { background: #1a2a1a; color: var(--green); border: 1px solid var(--green); }
+    .bug-title { font-size: 0.9rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .bug-cause { font-size: 0.82rem; color: #f7b731; margin-bottom: 3px; }
+    .bug-fix   { font-size: 0.82rem; color: var(--muted); }
 
     /* Tree */
-    .tree {
-      font-family: 'Fira Code', 'Cascadia Code', monospace;
-      font-size: 0.83rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px 28px;
-      line-height: 1.9;
-      color: var(--muted);
-    }
+    .tree { font-family: 'Fira Code', 'Cascadia Code', monospace; font-size: 0.83rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; line-height: 1.9; color: var(--muted); }
     .tree .dir  { color: var(--accent2); font-weight: 600; }
     .tree .file { color: var(--text); }
     .tree .note { color: var(--muted); font-style: italic; }
 
-    /* Trigger */
-    .trigger-row { display: flex; align-items: flex-start; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
-    .trigger-row:last-child { border-bottom: none; }
-    .trigger-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
-    .trigger-title { font-size: 0.92rem; font-weight: 600; color: #fff; }
-    .trigger-desc  { font-size: 0.83rem; color: var(--muted); margin-top: 3px; }
-
-    hr.divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
-
-    /* Env table */
-    .env-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .env-table th { text-align: left; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); padding: 8px 14px; border-bottom: 1px solid var(--border); }
-    .env-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
-    .env-table tr:last-child td { border-bottom: none; }
-    .env-table td:first-child { font-family: 'Fira Code', monospace; font-size: 0.82rem; color: var(--accent2); white-space: nowrap; }
-    .env-table td:nth-child(2) { color: var(--muted); }
-    .env-table td:nth-child(3) { color: var(--text-muted); font-size: 0.8rem; color: var(--muted); }
+    /* Env */
     .req { color: var(--red); font-size: 0.72rem; font-weight: 700; }
     .opt { color: var(--muted); font-size: 0.72rem; }
+
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
   </style>
 </head>
 <body>
@@ -313,19 +155,19 @@
   <!-- Header -->
   <div class="header">
     <h1>Job Tracker <span>Project Reference</span></h1>
-    <p>Full-stack multi-user SaaS for tracking job applications end-to-end — system design, API, infrastructure, CI/CD, and changelog.</p>
+    <p>Full-stack job application tracker. Personal project used for tracking applications, interview rounds, and notifications. Built to run locally and deploy to free-tier cloud services.</p>
     <div class="badge-row">
       <span class="badge accent">React 19 + Vite 7</span>
       <span class="badge teal">Express + TypeScript</span>
-      <span class="badge green">PostgreSQL · Neon</span>
+      <span class="badge green">PostgreSQL</span>
       <span class="badge accent">Vercel</span>
       <span class="badge teal">Render</span>
-      <span class="badge blue">Cloudinary</span>
-      <span class="badge yellow">Gemini 1.5 Flash</span>
       <span class="badge">JWT Auth</span>
       <span class="badge">Zustand v5</span>
       <span class="badge">React Query v5</span>
+      <span class="badge">Prisma ORM</span>
       <span class="badge">GitHub Actions</span>
+      <span class="badge yellow">PWA</span>
     </div>
   </div>
 
@@ -334,22 +176,23 @@
     <a href="#live">Live URLs</a>
     <a href="#arch">Architecture</a>
     <a href="#stack">Tech Stack</a>
-    <a href="#infra">Infrastructure</a>
-    <a href="#cicd">CI/CD</a>
+    <a href="#local">Running Locally</a>
     <a href="#models">Data Models</a>
     <a href="#api">API Routes</a>
     <a href="#state">Frontend State</a>
     <a href="#notifications">Notifications</a>
     <a href="#flows">Data Flows</a>
+    <a href="#cicd">CI/CD</a>
     <a href="#env">Environment Variables</a>
     <a href="#files">File Structure</a>
-    <a href="#changelog">Changelog</a>
+    <a href="#decisions">Design Decisions</a>
+    <a href="#bugs">Bug Log</a>
   </div>
 
   <!-- Live URLs -->
   <section id="live">
     <div class="section-title">Live URLs</div>
-    <div class="infra-grid">
+    <div class="grid3">
       <div class="infra-card fe">
         <div class="service">Frontend</div>
         <div class="name">Vercel</div>
@@ -360,13 +203,13 @@
         <div class="service">Backend</div>
         <div class="name">Render</div>
         <div class="url">job-tracker-2tpr.onrender.com</div>
-        <div class="desc">Express API — auto-deploys on push to main</div>
+        <div class="desc">Express API — auto-deploys on push to main. Spins down after 15 min of inactivity on free tier.</div>
       </div>
       <div class="infra-card db">
-        <div class="service">Database</div>
+        <div class="service">Database (prod)</div>
         <div class="name">Neon</div>
         <div class="url">ap-southeast-1.aws.neon.tech</div>
-        <div class="desc">Serverless PostgreSQL — free tier</div>
+        <div class="desc">Serverless PostgreSQL free tier (0.5 GB). Uses pooler connection string.</div>
       </div>
     </div>
   </section>
@@ -376,309 +219,308 @@
     <div class="section-title">Architecture</div>
     <div class="arch">
       <div class="arch-box client">
-        <div class="label">Client</div>
+        <div class="label">Client (Browser)</div>
         <div class="title">React + Vite SPA</div>
-        <div class="sub">Table · Dashboard · Calendar · Notifications · Dark/Light mode</div>
+        <div class="sub">Applications · Dashboard · Calendar · Notifications · Dark/Light Mode · PWA Installable</div>
       </div>
       <div class="arch-arrow">
         <div class="line"></div>
-        <span>HTTPS · JWT Bearer</span>
+        <span>HTTPS · JWT Bearer token in header</span>
         <div class="line"></div>
       </div>
       <div class="arch-box server">
         <div class="label">API Server</div>
         <div class="title">Express + TypeScript</div>
-        <div class="sub">Routes → Auth Middleware → Controllers</div>
+        <div class="sub">Routes → authenticate middleware → Controllers → Prisma</div>
       </div>
-      <div class="arch-arrow">
-        <div class="line"></div>
-        <div class="line"></div>
-      </div>
+      <div class="arch-arrow"><div class="line"></div><div class="line"></div></div>
       <div class="arch-row">
         <div class="arch-leaf db-leaf">
           <div class="label">Database</div>
           <div class="title">PostgreSQL</div>
-          <div class="sub">Neon (prod)<br>Local (dev)</div>
-        </div>
-        <div class="arch-leaf cloud-leaf">
-          <div class="label">Storage</div>
-          <div class="title">Cloudinary</div>
-          <div class="sub">PDF resumes</div>
-        </div>
-        <div class="arch-leaf ai-leaf">
-          <div class="label">AI</div>
-          <div class="title">Gemini 1.5</div>
-          <div class="sub">JD summarize</div>
+          <div class="sub">Neon (prod)<br>Local Homebrew (dev)</div>
         </div>
         <div class="arch-leaf cron-leaf">
           <div class="label">Scheduler</div>
           <div class="title">node-cron</div>
-          <div class="sub">Daily 8 AM</div>
+          <div class="sub">Daily cleanup of<br>old notifications</div>
         </div>
       </div>
+    </div>
+    <br>
+    <div class="card">
+      <h3>Key Architectural Points</h3>
+      <ul>
+        <li><strong style="color:#fff">Vite proxy in dev:</strong> Frontend (port 5174) proxies <code>/api</code> to backend (port 3001). In prod, <code>VITE_API_URL</code> is set to the Render URL so requests go directly.</li>
+        <li><strong style="color:#fff">JWT stateless auth:</strong> No sessions. Token stored in localStorage via Zustand persist. Every request sends <code>Authorization: Bearer &lt;token&gt;</code>. 401 → auto-redirect to /login.</li>
+        <li><strong style="color:#fff">Prisma db push (no migrations):</strong> Schema changes applied with <code>prisma db push</code> locally. No migration files committed. Neon prod is updated manually before deploy.</li>
+        <li><strong style="color:#fff">Notifications are pre-scheduled:</strong> Not delivered in real time. When an application or round is saved, future notification records are written to DB with a <code>triggerDate</code>. The frontend polls <code>GET /api/notifications</code> every 60 seconds — the endpoint only returns records where <code>triggerDate ≤ now</code>.</li>
+        <li><strong style="color:#fff">Recharts + CSS vars limitation:</strong> SVG fill/stroke attributes can't use CSS variables directly. Dashboard charts use <code>useThemeStore</code> to read <code>isDark</code> and pass computed hex colors to Recharts props.</li>
+        <li><strong style="color:#fff">Mobile layout — Sidebar replaced by BottomNav:</strong> On small screens (<code>md:</code> breakpoint = 768px) the Sidebar is hidden (<code>hidden md:flex</code>). A fixed bottom navigation bar (<code>BottomNav.tsx</code>, <code>md:hidden</code>) provides 5-tab navigation instead. Desktop layout is entirely unchanged. All grids use <code>grid-cols-1 sm:grid-cols-2</code> patterns so content stacks on narrow screens.</li>
+        <li><strong style="color:#fff">Archive is a filtered view, not a DB state:</strong> REJECTED and GHOSTED are the "archived" statuses. <code>GET /api/applications</code> excludes them by default (<code>status NOT IN</code>). Pass <code>archived=true</code> to get them. No schema migration needed — status is the single source of truth.</li>
+      </ul>
     </div>
   </section>
 
   <!-- Tech Stack -->
   <section id="stack">
-    <div class="section-title">Tech Stack</div>
+    <div class="section-title">Tech Stack — Detailed</div>
     <div class="grid2">
       <div class="card">
-        <h3><span class="icon">🖥️</span> Frontend</h3>
+        <h3>Frontend</h3>
         <ul>
-          <li>React 19 + TypeScript</li>
-          <li>Vite 7 (esbuild dev, rolldown build)</li>
-          <li>Tailwind CSS v4 (via @tailwindcss/vite)</li>
-          <li>React Router v7</li>
-          <li>TanStack React Query v5</li>
-          <li>Zustand v5 — auth store + theme store</li>
-          <li>Recharts — pipeline funnel, activity chart, salary chart</li>
-          <li>React Big Calendar + date-fns v3</li>
+          <li>React 19 + TypeScript (strict mode)</li>
+          <li>Vite 7 — esbuild in dev, rolldown in build. Pinned to v7 because v8 needs Node ≥22.12.0 (local is 22.10.0)</li>
+          <li>Tailwind CSS v4 via <code>@tailwindcss/vite</code> — uses CSS custom properties for theming, not Tailwind dark mode</li>
+          <li>React Router v7 — SPA routing, ProtectedLayout wrapper</li>
+          <li>TanStack React Query v5 — server state, cache invalidation on mutations</li>
+          <li>Zustand v5 — auth store (token + user) + theme store (isDark), both persisted to localStorage</li>
+          <li>React Hook Form — form state, no re-renders on every keystroke</li>
+          <li>Recharts — PipelineFunnel (bar), ActivityChart (line), SalaryChart (scatter)</li>
+          <li>React Big Calendar + date-fns v3 subpath imports</li>
           <li>Lucide React — icons</li>
-          <li>Native fetch API (no axios)</li>
+          <li>Native fetch API — custom wrapper in <code>api.ts</code> (no axios)</li>
         </ul>
       </div>
       <div class="card">
-        <h3><span class="icon">⚙️</span> Backend</h3>
+        <h3>Backend</h3>
         <ul>
-          <li>Node.js + Express + TypeScript</li>
-          <li>Prisma ORM v5</li>
-          <li>PostgreSQL</li>
-          <li>JWT + bcryptjs (auth)</li>
-          <li>Cloudinary + Multer (resume upload)</li>
-          <li>Google Gemini 1.5 Flash (JD AI summary)</li>
-          <li>node-cron (notification scheduler)</li>
-          <li>Zod (validation)</li>
+          <li>Node.js + Express 4 + TypeScript</li>
+          <li>Prisma ORM v5 — type-safe DB queries, schema-first</li>
+          <li>PostgreSQL — local Homebrew postgresql@16, Neon in prod</li>
+          <li>JWT (<code>jsonwebtoken</code>) + <code>bcryptjs</code> for auth</li>
+          <li>Zod — request body validation. Schemas are partial for PATCH/PUT</li>
+          <li>node-cron — runs daily at 00:00 UTC to delete read notifications older than 30 days</li>
+          <li>Cloudinary + Multer — resume PDF upload (wired up but not exposed in current UI)</li>
+          <li>ts-node-dev — hot reload in development (<code>--respawn --transpile-only</code>)</li>
           <li>dotenv, cors</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <!-- Infrastructure -->
-  <section id="infra">
-    <div class="section-title">Infrastructure</div>
-    <div class="card">
-      <table class="state-table">
-        <thead>
-          <tr><th>Layer</th><th>Service</th><th>Plan</th><th>Notes</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Frontend hosting</td><td><code>Vercel</code></td><td>Free (Hobby)</td><td>Auto-deploy from GitHub, SPA routing via vercel.json</td></tr>
-          <tr><td>Backend hosting</td><td><code>Render</code></td><td>Free</td><td>Web service, auto-deploy, spins down on inactivity</td></tr>
-          <tr><td>Database</td><td><code>Neon</code></td><td>Free (0.5 GB)</td><td>Serverless PostgreSQL, pooler connection string</td></tr>
-          <tr><td>File storage</td><td><code>Cloudinary</code></td><td>Free (25 credits)</td><td>PDF resume upload via multer-storage-cloudinary</td></tr>
-          <tr><td>AI</td><td><code>Google Gemini</code></td><td>Free tier</td><td>gemini-1.5-flash model for JD summarization</td></tr>
-          <tr><td>Version control</td><td><code>GitHub</code></td><td>Free</td><td>asharon12/job-tracker</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- CI/CD -->
-  <section id="cicd">
-    <div class="section-title">CI/CD Pipeline</div>
-    <div class="pipeline" style="margin-bottom: 16px;">
-      <div class="pipeline-row">
-        <div class="p-step">Push / PR to main</div>
-        <div class="p-arrow">→</div>
-        <div class="p-step yellow">GitHub Actions triggers</div>
-        <div class="p-arrow">→</div>
-        <div class="p-desc">Only runs if files in <code style="font-family:monospace;background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:0.8rem">backend/**</code> or <code style="font-family:monospace;background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:0.8rem">frontend/**</code> changed</div>
-      </div>
-      <div class="pipeline-row">
-        <div class="p-step">npm ci</div>
-        <div class="p-arrow">→</div>
-        <div class="p-step">prisma generate</div>
-        <div class="p-arrow">→</div>
-        <div class="p-step">tsc --noEmit</div>
-        <div class="p-arrow">→</div>
-        <div class="p-step green">✓ Build passes</div>
-      </div>
-      <div class="pipeline-row">
-        <div class="p-step green">Merged to main</div>
-        <div class="p-arrow">→</div>
-        <div class="p-step blue">Vercel auto-deploys frontend</div>
-        <div class="p-arrow">+</div>
-        <div class="p-step teal" style="border-color:var(--accent2);color:var(--accent2)">Render auto-deploys backend</div>
-      </div>
-    </div>
-    <div class="card">
-      <h3>Workflow Files</h3>
+  <!-- Running Locally -->
+  <section id="local">
+    <div class="section-title">Running Locally</div>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Prerequisites</h3>
       <ul>
-        <li><strong style="color:#fff">.github/workflows/backend.yml</strong> — install → prisma generate → tsc --noEmit</li>
-        <li><strong style="color:#fff">.github/workflows/frontend.yml</strong> — install (legacy-peer-deps) → tsc --noEmit → vite build</li>
-        <li>Both run on Node.js 22, use npm cache for speed</li>
-        <li>Deploy jobs removed — Vercel and Render handle auto-deploy natively</li>
+        <li>Node.js 22.10+ and npm</li>
+        <li>PostgreSQL 16 via Homebrew — <code>brew services start postgresql@16</code></li>
+        <li>Database created: <code>createdb jobtracker</code></li>
+      </ul>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Backend — <code>backend/.env</code></h3>
+      <ul>
+        <li><code>DATABASE_URL=postgresql://&lt;user&gt;@localhost:5432/jobtracker</code></li>
+        <li><code>JWT_SECRET=any-long-random-string</code></li>
+        <li><code>JWT_EXPIRES_IN=7d</code></li>
+        <li><code>PORT=3001</code></li>
+        <li><code>CLIENT_URL=http://localhost:5174</code> ← must match Vite port exactly</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Start commands</h3>
+      <ul>
+        <li>Backend: <code>cd backend &amp;&amp; npx prisma db push &amp;&amp; npm run dev</code></li>
+        <li>Frontend: <code>cd frontend &amp;&amp; npm run dev</code></li>
+        <li>Port 3001 is auto-cleared before every start via the <code>predev</code> script in backend/package.json — no manual kill needed</li>
+        <li>Prisma Studio (DB GUI): <code>cd backend &amp;&amp; npx prisma studio</code></li>
       </ul>
     </div>
   </section>
 
   <!-- Data Models -->
   <section id="models">
-    <div class="section-title">Data Models</div>
+    <div class="section-title">Data Models (Current Schema)</div>
     <div class="grid2">
       <div class="card">
-        <h3><span class="icon">👤</span> User</h3>
+        <h3>User</h3>
         <ul>
-          <li>id, name, email, passwordHash</li>
+          <li>id (uuid), email (unique), passwordHash, name</li>
           <li>createdAt</li>
           <li>→ applications, resumes, notifications</li>
         </ul>
       </div>
       <div class="card">
-        <h3><span class="icon">📋</span> Application</h3>
+        <h3>Application</h3>
         <ul>
-          <li>companyName, jobTitle, jobUrl</li>
-          <li>status: APPLIED · SCREENING · INTERVIEW · OFFER · REJECTED · GHOSTED</li>
-          <li>jdRaw, jdSummary (JSON)</li>
-          <li>salaryMin, salaryMax, salaryCurrency</li>
-          <li>workLocation: REMOTE · HYBRID · ONSITE</li>
-          <li>hasReferral + referee fields</li>
-          <li>appliedDate, deadlineDate, notes</li>
-          <li>→ resume, interviewRounds, notifications</li>
+          <li>companyName, jobTitle, jobUrl (optional)</li>
+          <li>status: <code>APPLIED</code> · <code>AWAITING_REFERRAL</code> · <code>SCREENING</code> · <code>INTERVIEW</code> · <code>OFFER</code> · <code>REJECTED</code> · <code>GHOSTED</code></li>
+          <li>jdRaw (text — plain job description field, stored as-is)</li>
+          <li>salaryMin (Float), salaryCurrency — single salary field, no max</li>
+          <li>workLocation (String — free text, e.g. "San Francisco, CA" or "Remote")</li>
+          <li>resumeName (String — text label of resume used, e.g. "Google_SWE.pdf")</li>
+          <li>hasReferral (Boolean), refereeName, refereeRole, refereeCompany, refereeLinkedin</li>
+          <li>appliedDate, notes</li>
+          <li>createdAt, updatedAt (auto)</li>
+          <li>→ interviewRounds, notifications</li>
         </ul>
       </div>
       <div class="card">
-        <h3><span class="icon">📄</span> Resume</h3>
+        <h3>InterviewRound</h3>
         <ul>
-          <li>name, fileUrl, fileName</li>
-          <li>uploadedAt</li>
-          <li>→ applications</li>
+          <li>roundNumber (auto-incremented per application)</li>
+          <li>roundType: <code>HR_SCREEN</code> · <code>OA</code> · <code>DSA</code> · <code>SYSTEM_DESIGN</code> · <code>BEHAVIORAL</code> · <code>CASE_STUDY</code> · <code>OTHER</code></li>
+          <li>scheduledDate (DateTime — stores full datetime including time in UTC)</li>
+          <li>notes (optional)</li>
+          <li>outcome: <code>PENDING</code> · <code>PASSED</code> · <code>FAILED</code> · <code>CANCELLED</code></li>
         </ul>
       </div>
       <div class="card">
-        <h3><span class="icon">🎯</span> InterviewRound</h3>
+        <h3>Notification</h3>
         <ul>
-          <li>roundNumber, roundType</li>
-          <li>HR_SCREEN · OA · DSA · SYSTEM_DESIGN · BEHAVIORAL · CASE_STUDY · OTHER</li>
-          <li>scheduledDate, notes</li>
-          <li>outcome: PENDING · PASSED · FAILED · CANCELLED</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3><span class="icon">🔔</span> Notification</h3>
-        <ul>
-          <li>type: DEADLINE_REMINDER · FOLLOW_UP</li>
-          <li>message, isRead</li>
-          <li>triggerDate, createdAt</li>
+          <li>type: <code>FOLLOW_UP</code> · <code>AWAITING_REFERRAL_REMINDER</code></li>
+          <li>message (string), isRead (Boolean)</li>
+          <li>triggerDate — when it becomes visible to the user</li>
+          <li>createdAt</li>
           <li>→ user, application</li>
         </ul>
       </div>
+      <div class="card">
+        <h3>Resume (wired, not in active UI)</h3>
+        <ul>
+          <li>name, fileUrl, fileName (Cloudinary)</li>
+          <li>uploadedAt</li>
+          <li>The sidebar "Build Resume" link points to an external hosted resume builder instead</li>
+        </ul>
+      </div>
+    </div>
+
+    <br>
+    <div class="card">
+      <h3>Schema decisions worth remembering</h3>
+      <table class="tbl">
+        <thead><tr><th>Field</th><th>Why it's this way</th></tr></thead>
+        <tbody>
+          <tr><td>workLocation String?</td><td>Originally an enum (REMOTE/HYBRID/ONSITE). Changed to free text so users can enter "San Francisco, CA" or any custom value.</td></tr>
+          <tr><td>resumeName String?</td><td>Added as a plain text field. Users type the name of the PDF they're using (e.g. "Google_SWE_Resume.pdf"). Resume file upload (Cloudinary) is wired up in backend but not surfaced in UI.</td></tr>
+          <tr><td>salaryMin only (no salaryMax)</td><td>UI was simplified to a single "Salary" field. salaryMax removed from schema, API, types, and charts.</td></tr>
+          <tr><td>AWAITING_REFERRAL status</td><td>Added to track applications where you're waiting on a referral before formally applying.</td></tr>
+          <tr><td>REJECTED / GHOSTED as archive</td><td>No separate "isArchived" column or table. These two statuses are treated as the archived state. The Applications page shows an Active tab (excludes them) and an Archived tab (shows only them). Moving a REJECTED app back to APPLIED immediately returns it to the active list.</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
   <!-- API Routes -->
   <section id="api">
     <div class="section-title">API Routes</div>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">All routes except <code>/api/auth/*</code> and <code>/api/health</code> require <code>Authorization: Bearer &lt;token&gt;</code>.</p>
 
     <div class="api-group">
       <div class="api-group-title">Auth</div>
-      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/auth/register</span></div>
-      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/auth/login</span></div>
-      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/auth/me</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/auth/register</span><span class="route-note">{ name, email, password } → { token, user }</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/auth/login</span><span class="route-note">{ email, password } → { token, user }</span></div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/auth/me</span><span class="route-note">returns current user from token</span></div>
     </div>
 
     <div class="api-group">
       <div class="api-group-title">Applications</div>
-      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/applications</span><span class="route-note">?status= &search= &page= &limit=</span></div>
-      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/applications</span></div>
-      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/applications/:id</span></div>
-      <div class="api-route"><span class="method put">PUT</span><span class="route-path">/api/applications/:id</span></div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/applications</span><span class="route-note">?status= &amp;search= &amp;page= &amp;limit=20 &amp;archived=true — default excludes REJECTED/GHOSTED</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/applications</span><span class="route-note">creates + triggers notifications</span></div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/applications/:id</span><span class="route-note">includes interviewRounds</span></div>
+      <div class="api-route"><span class="method put">PUT</span><span class="route-path">/api/applications/:id</span><span class="route-note">partial update + re-triggers notifications</span></div>
       <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/applications/:id</span></div>
-      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/applications/:id/summarize-jd</span><span class="route-note">Gemini AI</span></div>
     </div>
 
     <div class="api-group">
       <div class="api-group-title">Interview Rounds</div>
       <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/applications/:appId/rounds</span></div>
-      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/applications/:appId/rounds</span></div>
-      <div class="api-route"><span class="method put">PUT</span><span class="route-path">/api/applications/:appId/rounds/:roundId</span></div>
-      <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/applications/:appId/rounds/:roundId</span></div>
-    </div>
-
-    <div class="api-group">
-      <div class="api-group-title">Resumes</div>
-      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/resumes</span></div>
-      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/resumes</span><span class="route-note">multipart/form-data</span></div>
-      <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/resumes/:id</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/applications/:appId/rounds</span><span class="route-note">auto-assigns roundNumber, triggers notifications</span></div>
+      <div class="api-route"><span class="method put">PUT</span><span class="route-path">/api/applications/:appId/rounds/:roundId</span><span class="route-note">triggers notifications</span></div>
+      <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/applications/:appId/rounds/:roundId</span><span class="route-note">re-numbers remaining rounds, triggers notifications</span></div>
     </div>
 
     <div class="api-group">
       <div class="api-group-title">Notifications</div>
-      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/notifications</span></div>
-      <div class="api-route"><span class="method patch">PATCH</span><span class="route-path">/api/notifications/read-all</span></div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/notifications</span><span class="route-note">only returns where triggerDate ≤ now</span></div>
       <div class="api-route"><span class="method patch">PATCH</span><span class="route-path">/api/notifications/:id/read</span></div>
+      <div class="api-route"><span class="method patch">PATCH</span><span class="route-path">/api/notifications/read-all</span></div>
       <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/notifications/:id</span></div>
     </div>
 
     <div class="api-group">
-      <div class="api-group-title">Stats</div>
-      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/stats</span><span class="route-note">pipeline · activity · response rate · salary</span></div>
+      <div class="api-group-title">Stats (Dashboard)</div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/stats</span><span class="route-note">pipeline counts · 12-week activity · response rate · salary data</span></div>
+    </div>
+
+    <div class="api-group">
+      <div class="api-group-title">Resumes (backend wired, not in UI)</div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/resumes</span></div>
+      <div class="api-route"><span class="method post">POST</span><span class="route-path">/api/resumes</span><span class="route-note">multipart/form-data → Cloudinary</span></div>
+      <div class="api-route"><span class="method delete">DELETE</span><span class="route-path">/api/resumes/:id</span></div>
     </div>
 
     <div class="api-group">
       <div class="api-group-title">Health</div>
-      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/health</span><span class="route-note">returns {"status":"ok"}</span></div>
+      <div class="api-route"><span class="method get">GET</span><span class="route-path">/api/health</span><span class="route-note">{"status":"ok"} — used by Render to detect service is up</span></div>
     </div>
   </section>
 
-  <!-- Frontend State Strategy -->
+  <!-- Frontend State -->
   <section id="state">
     <div class="section-title">Frontend State Strategy</div>
     <div class="card">
-      <table class="state-table">
-        <thead>
-          <tr><th>Concern</th><th>Tool</th><th>Notes</th></tr>
-        </thead>
+      <table class="tbl">
+        <thead><tr><th>Concern</th><th>Tool</th><th>Notes</th></tr></thead>
         <tbody>
-          <tr><td>Auth</td><td><code>Zustand</code></td><td>Token + user persisted to localStorage via persist middleware</td></tr>
-          <tr><td>Theme</td><td><code>Zustand</code></td><td>isDark persisted to localStorage, applies data-theme to &lt;html&gt;</td></tr>
-          <tr><td>Server data</td><td><code>React Query</code></td><td>Caching, background refetch every 60s (notifications), invalidation on mutations</td></tr>
-          <tr><td>Routing</td><td><code>React Router v7</code></td><td>ProtectedLayout guards unauthenticated access, redirects to /login</td></tr>
-          <tr><td>Forms</td><td><code>React Hook Form + Zod</code></td><td>Client-side validation mirrors backend Zod schemas</td></tr>
-          <tr><td>Charts</td><td><code>Recharts</code></td><td>Pipeline funnel, activity line chart, salary distribution</td></tr>
-          <tr><td>Calendar</td><td><code>react-big-calendar</code></td><td>dateFnsLocalizer with date-fns v3 subpath imports</td></tr>
-          <tr><td>HTTP</td><td><code>Native fetch</code></td><td>Custom wrapper in api.ts — handles JWT header, 401 redirect, 204 empty</td></tr>
+          <tr><td>Auth (token + user)</td><td><code>Zustand</code></td><td>Persisted to localStorage. On 401 response, token is cleared and user is redirected to /login.</td></tr>
+          <tr><td>Theme (dark/light)</td><td><code>Zustand</code></td><td>Persisted to localStorage. <code>applyTheme(isDark)</code> sets <code>data-theme</code> on &lt;html&gt;, which switches CSS variables.</td></tr>
+          <tr><td>Server data</td><td><code>React Query</code></td><td>All API data. Notifications refetch every 60s. Mutations call <code>invalidateQueries</code> on success to keep UI fresh.</td></tr>
+          <tr><td>Forms</td><td><code>React Hook Form</code></td><td>ApplicationForm uses <code>register</code> + <code>handleSubmit</code>. Edit mode pre-fills with <code>defaultValues</code> — extra Application fields (id, userId etc.) are stripped before sending to backend.</td></tr>
+          <tr><td>Routing</td><td><code>React Router v7</code></td><td>ProtectedLayout checks Zustand token — redirects to /login if missing. All app pages are children of ProtectedLayout.</td></tr>
+          <tr><td>Charts</td><td><code>Recharts</code></td><td>Pipeline funnel (BarChart), 12-week activity (LineChart), salary scatter (ScatterChart). Theme colors computed from <code>useThemeStore</code> since SVG can't use CSS variables.</td></tr>
+          <tr><td>Calendar</td><td><code>react-big-calendar</code></td><td>dateFnsLocalizer with date-fns v3 subpath imports. Shows interview round dates only (deadline events removed).</td></tr>
+          <tr><td>HTTP</td><td><code>Native fetch</code></td><td>Wrapper in <code>api.ts</code> — injects JWT header, handles 401 redirect, handles 204 empty response, throws Error with message string (not object) on failure.</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- Notification System -->
+  <!-- Notifications -->
   <section id="notifications">
     <div class="section-title">Notification System</div>
-    <div class="card">
+    <div class="card" style="margin-bottom:16px">
       <div class="flow">
-        <div class="trigger-row">
-          <div class="trigger-icon">⏰</div>
-          <div>
-            <div class="trigger-title">Deadline Reminder</div>
-            <div class="trigger-desc">Pre-scheduled 3 days before <code style="font-family:monospace;font-size:0.8rem;background:#21253a;padding:2px 6px;border-radius:4px;color:#4ecdc4">deadlineDate</code>. Created when application is saved. Old future unread notifications deleted before re-creating (deduplication).</div>
-          </div>
-        </div>
         <div class="trigger-row">
           <div class="trigger-icon">📅</div>
           <div>
-            <div class="trigger-title">Interview Day Reminder (FOLLOW_UP)</div>
-            <div class="trigger-desc">Scheduled for 8 AM on the day of each <code style="font-family:monospace;font-size:0.8rem;background:#21253a;padding:2px 6px;border-radius:4px;color:#4ecdc4">InterviewRound.scheduledDate</code>. Created per round when rounds are added/updated.</div>
+            <div class="trigger-title">Interview Reminder (FOLLOW_UP)</div>
+            <div class="trigger-desc">Fires <strong>12 hours before</strong> a scheduled interview round. <code>triggerDate = scheduledDate − 12h</code> (pure UTC arithmetic — timezone-correct for all users). Created/replaced whenever an application or round is saved. Only created if the trigger time is still in the future.</div>
           </div>
         </div>
         <div class="trigger-row">
-          <div class="trigger-icon">🗑️</div>
+          <div class="trigger-icon">⏳</div>
           <div>
-            <div class="trigger-title">Cleanup Cron (daily 8 AM)</div>
-            <div class="trigger-desc">Deletes read notifications older than 30 days to keep the DB clean.</div>
+            <div class="trigger-title">Awaiting Referral Reminder (AWAITING_REFERRAL_REMINDER)</div>
+            <div class="trigger-desc">Fires <strong>48 hours after</strong> status is set to AWAITING_REFERRAL. <code>triggerDate = now + 48h</code>. The 48h clock does <em>not</em> reset if you edit notes or other fields — only resets if you change status away and back. If status changes to anything else, the pending reminder is cancelled immediately.</div>
           </div>
         </div>
         <div class="trigger-row">
           <div class="trigger-icon">🔔</div>
           <div>
             <div class="trigger-title">Delivery</div>
-            <div class="trigger-desc">In-app only. Stored in DB. Frontend fetches <code style="font-family:monospace;font-size:0.8rem;background:#21253a;padding:2px 6px;border-radius:4px;color:#4ecdc4">GET /api/notifications</code> every 60 seconds. Bell badge shows unread count. Click to mark as read.</div>
+            <div class="trigger-desc">In-app only. No emails or push notifications. Frontend polls <code>GET /api/notifications</code> every 60 seconds. Endpoint returns only records where <code>triggerDate ≤ now</code>. Bell icon in Navbar shows unread count. Full Notifications page in sidebar shows all with mark-read and delete.</div>
+          </div>
+        </div>
+        <div class="trigger-row">
+          <div class="trigger-icon">🗑️</div>
+          <div>
+            <div class="trigger-title">Daily Cleanup Cron</div>
+            <div class="trigger-desc">Runs daily at 00:00 UTC via <code>node-cron</code>. Deletes read notifications older than 30 days. Keeps DB size in check.</div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="card">
+      <h3>Where <code>generateNotificationsForApplication</code> is called</h3>
+      <ul>
+        <li><strong style="color:#fff">application.controller.ts</strong> — createApplication, updateApplication</li>
+        <li><strong style="color:#fff">round.controller.ts</strong> — addRound, updateRound, deleteRound</li>
+        <li>Each call first deletes future FOLLOW_UP notifications for that application, then recreates from current rounds. AWAITING_REFERRAL_REMINDER is only created if none already exists (no duplicate clock reset).</li>
+      </ul>
     </div>
   </section>
 
@@ -689,39 +531,84 @@
       <div class="card">
         <h3>Auth Flow</h3>
         <div class="flow">
-          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">Register / Login → <strong>POST /api/auth/register|login</strong></div></div>
-          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Server returns <strong>{ token, user }</strong> → stored in Zustand + localStorage</div></div>
-          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Every API request adds <strong>Authorization: Bearer &lt;token&gt;</strong></div></div>
-          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">401 response → token cleared → redirect to /login</div></div>
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">POST /api/auth/login with email + password</div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Server bcrypt-compares password, returns <strong>{ token, user }</strong></div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Zustand stores token in memory + persists to localStorage</div></div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">Every fetch adds <strong>Authorization: Bearer &lt;token&gt;</strong> header</div></div>
+          <div class="flow-step"><div class="flow-num">5</div><div class="flow-text">401 → localStorage.removeItem('token') → redirect /login</div></div>
         </div>
       </div>
       <div class="card">
-        <h3>JD Summarization</h3>
+        <h3>Add Application Flow</h3>
         <div class="flow">
-          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">User pastes JD text into application form</div></div>
-          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text"><strong>POST /api/applications/:id/summarize-jd</strong></div></div>
-          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Gemini 1.5 Flash returns structured JSON (skills, responsibilities, tech stack)</div></div>
-          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">Saved to <strong>jdSummary</strong> column → rendered as bullet points</div></div>
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">User fills ApplicationForm and clicks Save</div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">React Hook Form's handleSubmit validates + calls onSubmit</div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">POST /api/applications → Zod validates body → Prisma creates row</div></div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">generateNotificationsForApplication schedules any relevant notifications</div></div>
+          <div class="flow-step"><div class="flow-num">5</div><div class="flow-text">React Query invalidates ['applications'] → table refreshes</div></div>
         </div>
       </div>
       <div class="card">
-        <h3>Resume Upload</h3>
+        <h3>Edit Application Flow</h3>
         <div class="flow">
-          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text"><strong>POST /api/resumes</strong> with multipart/form-data</div></div>
-          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">multer-storage-cloudinary streams file directly to Cloudinary</div></div>
-          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">DB stores <strong>fileUrl, fileName, name</strong> linked to user</div></div>
-          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">User links resume to application via <strong>resumeId</strong></div></div>
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">Click Edit in table row</div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text"><code>updateApp.reset()</code> clears any prior error, modal opens with defaultValues</div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">appliedDate converted to YYYY-MM-DD for the date input</div></div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">On save, extra fields (id, userId, createdAt…) stripped before PUT request</div></div>
+          <div class="flow-step"><div class="flow-num">5</div><div class="flow-text">PUT /api/applications/:id → Zod partial validates → Prisma updates</div></div>
         </div>
       </div>
       <div class="card">
         <h3>Dark / Light Mode</h3>
         <div class="flow">
           <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">User clicks Sun/Moon icon in Navbar</div></div>
-          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Zustand <strong>theme.store</strong> toggles isDark, persists to localStorage</div></div>
-          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text"><strong>data-theme="dark|light"</strong> set on &lt;html&gt; element</div></div>
-          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">CSS variables (--bg-base, --text, --border etc.) switch values</div></div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Zustand theme.store toggles isDark, persists to localStorage</div></div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-text"><code>data-theme="dark|light"</code> set on &lt;html&gt; element</div></div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">All components use <code>bg-[var(--bg-surface)]</code> etc. — switch instantly</div></div>
+          <div class="flow-step"><div class="flow-num">5</div><div class="flow-text">Recharts components re-read isDark and pass hex values to SVG props</div></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- CI/CD -->
+  <section id="cicd">
+    <div class="section-title">CI/CD Pipeline</div>
+    <div class="pipeline">
+      <div class="pipeline-row">
+        <div class="p-step">Push / PR → main</div>
+        <div class="p-arrow">→</div>
+        <div class="p-step yellow">GitHub Actions</div>
+        <div class="p-arrow">→</div>
+        <div style="font-size:0.82rem;color:var(--muted)">Path filters: only runs if files in <code>backend/**</code> or <code>frontend/**</code> changed</div>
+      </div>
+      <div class="pipeline-row">
+        <div class="p-step">npm ci</div>
+        <div class="p-arrow">→</div>
+        <div class="p-step">prisma generate</div>
+        <div class="p-arrow">→</div>
+        <div class="p-step">tsc --noEmit</div>
+        <div class="p-arrow">→</div>
+        <div class="p-step">vite build</div>
+        <div class="p-arrow">→</div>
+        <div class="p-step green">✓ Passes</div>
+      </div>
+      <div class="pipeline-row">
+        <div class="p-step green">Merged to main</div>
+        <div class="p-arrow">→</div>
+        <div class="p-step blue">Vercel auto-deploys frontend</div>
+        <div class="p-arrow">+</div>
+        <div class="p-step teal">Render auto-deploys backend</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Workflow files</h3>
+      <ul>
+        <li><code>.github/workflows/backend.yml</code> — Node 22, npm ci, prisma generate, tsc --noEmit</li>
+        <li><code>.github/workflows/frontend.yml</code> — Node 22, npm ci --legacy-peer-deps, tsc --noEmit, vite build</li>
+        <li>Deploy jobs are NOT in the workflow files — Vercel and Render detect main branch pushes natively and auto-deploy</li>
+        <li>No tests yet — CI is purely a type-check + build gate</li>
+      </ul>
     </div>
   </section>
 
@@ -729,21 +616,18 @@
   <section id="env">
     <div class="section-title">Environment Variables</div>
     <div class="card">
-      <table class="env-table">
-        <thead>
-          <tr><th>Variable</th><th>Where</th><th>Required</th><th>Notes</th></tr>
-        </thead>
+      <table class="tbl">
+        <thead><tr><th>Variable</th><th>Where set</th><th>Required?</th><th>Notes</th></tr></thead>
         <tbody>
-          <tr><td>DATABASE_URL</td><td>Backend</td><td><span class="req">Required</span></td><td>Neon pooler connection string (sslmode=require)</td></tr>
-          <tr><td>JWT_SECRET</td><td>Backend</td><td><span class="req">Required</span></td><td>Long random string — never commit this</td></tr>
-          <tr><td>JWT_EXPIRES_IN</td><td>Backend</td><td><span class="req">Required</span></td><td>e.g. 7d, 30d, 1h</td></tr>
-          <tr><td>PORT</td><td>Backend</td><td><span class="req">Required</span></td><td>3001 locally, 10000 on Render</td></tr>
-          <tr><td>CLIENT_URL</td><td>Backend</td><td><span class="req">Required</span></td><td>CORS origin — Vercel URL in prod, http://localhost:5173 locally</td></tr>
-          <tr><td>CLOUDINARY_CLOUD_NAME</td><td>Backend</td><td><span class="opt">Optional</span></td><td>Resume upload. Leave blank to disable.</td></tr>
-          <tr><td>CLOUDINARY_API_KEY</td><td>Backend</td><td><span class="opt">Optional</span></td><td>Resume upload</td></tr>
-          <tr><td>CLOUDINARY_API_SECRET</td><td>Backend</td><td><span class="opt">Optional</span></td><td>Resume upload</td></tr>
-          <tr><td>GEMINI_API_KEY</td><td>Backend</td><td><span class="opt">Optional</span></td><td>JD summarization. Leave blank to disable.</td></tr>
-          <tr><td>VITE_API_URL</td><td>Frontend</td><td><span class="req">Required (prod)</span></td><td>Render backend URL. Empty = use Vite proxy (local dev).</td></tr>
+          <tr><td>DATABASE_URL</td><td>backend/.env + Render</td><td><span class="req">Required</span></td><td>Local: <code>postgresql://user@localhost:5432/jobtracker</code>. Prod: Neon pooler URL with <code>sslmode=require</code></td></tr>
+          <tr><td>JWT_SECRET</td><td>backend/.env + Render</td><td><span class="req">Required</span></td><td>Long random string. Generate with: <code>node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"</code>. Never commit.</td></tr>
+          <tr><td>JWT_EXPIRES_IN</td><td>backend/.env + Render</td><td><span class="req">Required</span></td><td><code>7d</code> locally. Adjust as needed.</td></tr>
+          <tr><td>PORT</td><td>backend/.env + Render</td><td><span class="req">Required</span></td><td>3001 locally. Render injects its own PORT automatically.</td></tr>
+          <tr><td>CLIENT_URL</td><td>backend/.env + Render</td><td><span class="req">Required</span></td><td>CORS allowed origin. Local: <code>http://localhost:5174</code> (must match Vite port). Prod: Vercel URL.</td></tr>
+          <tr><td>CLOUDINARY_CLOUD_NAME</td><td>backend/.env + Render</td><td><span class="opt">Optional</span></td><td>Resume PDF upload. Leave blank — resume upload not used in current UI.</td></tr>
+          <tr><td>CLOUDINARY_API_KEY</td><td>backend/.env + Render</td><td><span class="opt">Optional</span></td><td>As above</td></tr>
+          <tr><td>CLOUDINARY_API_SECRET</td><td>backend/.env + Render</td><td><span class="opt">Optional</span></td><td>As above</td></tr>
+          <tr><td>VITE_API_URL</td><td>Vercel env vars</td><td><span class="req">Required (prod only)</span></td><td>Set to Render backend URL. In local dev leave empty — Vite proxy handles /api → localhost:3001.</td></tr>
         </tbody>
       </table>
     </div>
@@ -755,69 +639,72 @@
     <div class="grid2">
       <div class="tree">
 <span class="dir">backend/src/</span><br>
-&nbsp;&nbsp;<span class="file">index.ts</span>                    <span class="note">← Express app + cron</span><br>
-&nbsp;&nbsp;<span class="dir">routes/</span><br>
+&nbsp;&nbsp;<span class="file">index.ts</span>                    <span class="note">← Express app boot + node-cron</span><br>
+&nbsp;&nbsp;<span class="dir">routes/</span>                     <span class="note">← wire URL to controller</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.routes.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">application.routes.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">round.routes.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">resume.routes.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">notification.routes.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">stats.routes.ts</span><br>
-&nbsp;&nbsp;<span class="dir">controllers/</span><br>
+&nbsp;&nbsp;<span class="dir">controllers/</span>               <span class="note">← business logic</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.controller.ts</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">application.controller.ts</span>  <span class="note">← Gemini</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">round.controller.ts</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">resume.controller.ts</span>       <span class="note">← Cloudinary</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">application.controller.ts</span>  <span class="note">← Zod + Prisma</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">round.controller.ts</span>        <span class="note">← calls generateNotifications</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">resume.controller.ts</span>       <span class="note">← Cloudinary upload</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">notification.controller.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">stats.controller.ts</span><br>
 &nbsp;&nbsp;<span class="dir">middleware/</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.ts</span>                    <span class="note">← JWT verify</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.ts</span>                    <span class="note">← JWT verify, sets req.userId</span><br>
 &nbsp;&nbsp;<span class="dir">lib/</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">prisma.ts</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">cloudinary.ts</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">notifications.ts</span>          <span class="note">← schedule logic</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">prisma.ts</span>                  <span class="note">← singleton PrismaClient</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">notifications.ts</span>          <span class="note">← scheduling logic</span><br>
 &nbsp;&nbsp;<span class="dir">types/</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">index.ts</span>                   <span class="note">← AuthRequest</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">index.ts</span>                   <span class="note">← AuthRequest (extends Request)</span><br>
+<br>
+<span class="dir">backend/prisma/</span><br>
+&nbsp;&nbsp;<span class="file">schema.prisma</span>              <span class="note">← source of truth for DB shape</span>
       </div>
       <div class="tree">
 <span class="dir">frontend/src/</span><br>
-&nbsp;&nbsp;<span class="file">main.tsx</span><br>
-&nbsp;&nbsp;<span class="file">App.tsx</span>                    <span class="note">← routes + ProtectedLayout</span><br>
-&nbsp;&nbsp;<span class="file">index.css</span>                  <span class="note">← CSS variables (dark/light)</span><br>
+&nbsp;&nbsp;<span class="file">main.tsx</span>                   <span class="note">← React root</span><br>
+&nbsp;&nbsp;<span class="file">App.tsx</span>                    <span class="note">← BrowserRouter + ProtectedLayout</span><br>
+&nbsp;&nbsp;<span class="file">index.css</span>                  <span class="note">← CSS variables dark/light themes</span><br>
 &nbsp;&nbsp;<span class="dir">lib/</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">api.ts</span>                     <span class="note">← native fetch wrapper</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">dates.ts</span>                   <span class="note">← Intl date formatters</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">api.ts</span>                     <span class="note">← fetch wrapper (JWT, errors)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">dates.ts</span>                   <span class="note">← fmtDate, fmtDateTime helpers</span><br>
 &nbsp;&nbsp;<span class="dir">store/</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.store.ts</span>              <span class="note">← token + user</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">theme.store.ts</span>             <span class="note">← dark/light toggle</span><br>
-&nbsp;&nbsp;<span class="dir">hooks/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">auth.store.ts</span>              <span class="note">← token + user (persisted)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">theme.store.ts</span>             <span class="note">← isDark (persisted)</span><br>
+&nbsp;&nbsp;<span class="dir">hooks/</span>                     <span class="note">← React Query mutations/queries</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useApplications.ts</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useRounds.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useNotifications.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useStats.ts</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useResumes.ts</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useRounds.ts</span><br>
 &nbsp;&nbsp;<span class="dir">pages/</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">LoginPage.tsx</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">RegisterPage.tsx</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">DashboardPage.tsx</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationsPage.tsx</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">CalendarPage.tsx</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ResumesPage.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationsPage.tsx</span>       <span class="note">← add/edit/detail modals</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">CalendarPage.tsx</span>           <span class="note">← interview rounds on calendar</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">NotificationsPage.tsx</span>      <span class="note">← full notifications list</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ResumesPage.tsx</span>            <span class="note">← (legacy, not in sidebar nav)</span><br>
 &nbsp;&nbsp;<span class="dir">components/layout/</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Navbar.tsx</span>                 <span class="note">← bell + theme toggle</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Sidebar.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Sidebar.tsx</span>                <span class="note">← desktop nav only (hidden md:flex)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">BottomNav.tsx</span>              <span class="note">← mobile bottom nav (md:hidden), 5 tabs</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Navbar.tsx</span>                 <span class="note">← bell icon + theme toggle + mobile logout</span><br>
 &nbsp;&nbsp;<span class="dir">components/applications/</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationTable.tsx</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationForm.tsx</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationDetail.tsx</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">JDSummary.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationTable.tsx</span>       <span class="note">← inline StatusSelect</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationForm.tsx</span>        <span class="note">← add + edit form</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ApplicationDetail.tsx</span>      <span class="note">← rounds + JD view</span><br>
 &nbsp;&nbsp;<span class="dir">components/dashboard/</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">StatCards.tsx</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">PipelineFunnel.tsx</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ActivityChart.tsx</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">SalaryChart.tsx</span><br>
 &nbsp;&nbsp;<span class="dir">components/notifications/</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">NotificationPanel.tsx</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">NotificationPanel.tsx</span>      <span class="note">← dropdown from bell icon</span><br>
 &nbsp;&nbsp;<span class="dir">components/ui/</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Modal.tsx</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">StatusBadge.tsx</span>
@@ -825,80 +712,130 @@
     </div>
   </section>
 
-  <!-- Changelog -->
-  <section id="changelog">
-    <div class="section-title">Changelog</div>
+  <!-- Design Decisions -->
+  <section id="decisions">
+    <div class="section-title">Design Decisions</div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Decision</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Native fetch over axios</td><td>axios caused blank screen in Vite 7 due to module-level initialisation at build time. Native fetch wrapper in api.ts does everything needed: auth header injection, 401 redirect, 204 handling.</td></tr>
+          <tr><td>Zod on backend only, no client-side Zod</td><td>React Hook Form handles required/type checks on the client. Full Zod validation lives on the backend as the authoritative gate. Keeps the frontend bundle smaller.</td></tr>
+          <tr><td>CSS custom properties for theming</td><td>Tailwind dark mode variants require PurgeCSS to know which classes exist. CSS variables let all components use the same class names (<code>bg-[var(--bg-surface)]</code>) and switch via a single attribute on &lt;html&gt;.</td></tr>
+          <tr><td>React Query for server state, Zustand only for client state</td><td>Avoids duplicating server data in Zustand. Mutations call <code>invalidateQueries</code> to refetch rather than manually patching cached state — simpler and less error-prone.</td></tr>
+          <tr><td>prisma db push (no migrations)</td><td>For a personal project with one developer, migration files add overhead without benefit. <code>prisma db push</code> syncs schema to DB directly. If schema diverges in prod, push manually before deploying.</td></tr>
+          <tr><td>Notifications pre-scheduled at write time</td><td>No background worker needed. When data is saved, triggerDate is computed and stored. The GET endpoint filters by <code>triggerDate ≤ now</code>, making delivery "free" — just a DB filter.</td></tr>
+          <tr><td>"Build Resume" as external link</td><td>Resume upload (Cloudinary) is wired in the backend but the UI was simplified. The sidebar links to a separately hosted resume builder project instead of managing PDFs inside this app.</td></tr>
+          <tr><td>Inline status dropdown in table</td><td>Avoids opening the full edit modal just to change status. StatusSelect component fires <code>useUpdateApplication</code> on change and updates the badge immediately via optimistic local state.</td></tr>
+          <tr><td>Archive via status filter (no new DB column)</td><td>REJECTED and GHOSTED are the archived states. <code>getApplications</code> controller uses <code>status NOT IN</code> by default and <code>status IN</code> when <code>archived=true</code> is passed. No schema migration, no boolean flag — status is already the right signal.</td></tr>
+          <tr><td>Mobile-first layout: Sidebar → BottomNav</td><td>Adding a responsive breakpoint to the existing Sidebar (<code>hidden md:flex</code>) keeps the desktop layout unchanged. A new BottomNav component (<code>md:hidden</code>) fixed to the bottom of the screen gives mobile users 5-tab navigation including the Resume Builder link. Bottom padding on main content (<code>pb-20</code>) prevents the nav from covering content.</td></tr>
+          <tr><td>PWA via vite-plugin-pwa</td><td>Configured in vite.config.ts with <code>registerType: 'autoUpdate'</code>. Auto-generates <code>sw.js</code> and <code>manifest.webmanifest</code> at build time. Requires HTTPS (Vercel in prod) for the browser to offer "Add to Home Screen". In local dev (HTTP) the manifest loads but install is blocked by browsers — test via Chrome DevTools → Application tab.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Bug Log -->
+  <section id="bugs">
+    <div class="section-title">Bug Log — Issues Encountered &amp; Fixed</div>
     <div class="card">
 
-      <div class="changelog-item">
-        <div class="cl-tag feat">feat</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">Dark / Light mode toggle</div>
-          <div class="cl-desc">Added Zustand theme store (persisted). Sun/Moon button in Navbar. CSS custom properties (--bg-base, --text, --border etc.) switch via data-theme attribute on &lt;html&gt;. Theme remembered across sessions.</div>
+          <div class="bug-title">CORS blocked all API requests</div>
+          <div class="bug-cause">Cause: Backend CLIENT_URL was set to port 5173, but Vite was running on 5174.</div>
+          <div class="bug-fix">Fix: Updated CLIENT_URL in backend/.env to http://localhost:5174.</div>
         </div>
       </div>
 
-      <div class="changelog-item">
-        <div class="cl-tag infra">infra</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">Deployed to Vercel + Render + Neon</div>
-          <div class="cl-desc">Frontend on Vercel (free Hobby plan), backend on Render (free web service), database on Neon (serverless PostgreSQL free tier). SPA routing fixed via vercel.json rewrites in frontend/ directory.</div>
+          <div class="bug-title">New application not saving — Zod validation failure</div>
+          <div class="bug-cause">Cause: Form sent empty string "" for workLocation (was an enum, rejected "") and resumeId (UUID format, rejected "").</div>
+          <div class="bug-fix">Fix: Changed workLocation from enum to String in schema. Added .or(z.literal('')) to resumeId Zod field.</div>
         </div>
       </div>
 
-      <div class="changelog-item">
-        <div class="cl-tag ci">ci</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">GitHub Actions CI pipeline</div>
-          <div class="cl-desc">backend.yml and frontend.yml — type check + build gate on every push/PR. Runs on Node 22. Backend adds prisma generate before tsc. Frontend uses --legacy-peer-deps. Deploy handled natively by Vercel/Render.</div>
+          <div class="bug-title">Backend crashing silently — "Unexpected end of JSON input"</div>
+          <div class="bug-cause">Cause: Gemini API key was invalid/missing. The Gemini call threw an unhandled promise rejection which crashed the entire Node process. Frontend received nothing back and errored with "Unexpected end of JSON input".</div>
+          <div class="bug-fix">Fix: Added API key presence guard + full try/catch around the Gemini call in the controller.</div>
         </div>
       </div>
 
-      <div class="changelog-item">
-        <div class="cl-tag fix">fix</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">Replaced axios with native fetch</div>
-          <div class="cl-desc">axios module-level initialization caused a blank screen in Vite 7's esbuild bundler. Replaced with a native fetch wrapper in api.ts. All hooks updated to remove .then(r =&gt; r.data) (axios response unwrapping).</div>
+          <div class="bug-title">Edit modal immediately showed "[object Object]"</div>
+          <div class="bug-cause">Cause (1): updateApp mutation error from a previous failed save was still in state when the modal opened. Cause (2): Zod validation errors are objects like { fieldErrors: {...} } — passing them to new Error(object) produces "[object Object]" as the message.</div>
+          <div class="bug-fix">Fix (1): Call updateApp.reset() before setEditApp(app) when Edit is clicked. Fix (2): Check typeof data.error === 'string' in api.ts before constructing the Error.</div>
         </div>
       </div>
 
-      <div class="changelog-item">
-        <div class="cl-tag fix">fix</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">import type for all TypeScript interfaces</div>
-          <div class="cl-desc">Vite's esbuild processes files in isolation (like isolatedModules). TypeScript interfaces compiled to nothing — bare imports failed at runtime with "does not provide an export named X". Fixed by changing all type-only imports to import type { ... }.</div>
+          <div class="bug-title">Edit save failing — "Request failed"</div>
+          <div class="bug-cause">Cause: React Hook Form includes all defaultValues fields in handleSubmit output, even unregistered ones. The full Application object (with id, userId, createdAt, jdRaw: null, jobUrl: null, etc.) was being sent. Zod rejected jobUrl: null (schema only allowed string URL or "") and jdRaw: null (schema only allowed string, not null).</div>
+          <div class="bug-fix">Fix: Strip non-form fields (id, userId, createdAt, updatedAt, interviewRounds, jdSummary, resume) in handleUpdate before sending. Added .nullable() to jobUrl and jdRaw in Zod schema.</div>
         </div>
       </div>
 
-      <div class="changelog-item">
-        <div class="cl-tag fix">fix</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">CalendarPage: replaced globalizeLocalizer with dateFnsLocalizer</div>
-          <div class="cl-desc">globalizeLocalizer(Globalize) runs at module level and requires CLDR data — crashed on load. Replaced with dateFnsLocalizer using date-fns v3 subpath imports (date-fns/format, date-fns/parse etc.).</div>
+          <div class="bug-title">Delete interview round not reflected in UI</div>
+          <div class="bug-cause">Cause: useDeleteRound and useUpdateRound only invalidated ['rounds', id] cache. ApplicationDetail uses useApplication which has query key ['application', id]. Wrong cache was being cleared.</div>
+          <div class="bug-fix">Fix: Added invalidateQueries(['application', id]) to both useDeleteRound and useUpdateRound.</div>
         </div>
       </div>
 
-      <div class="changelog-item">
-        <div class="cl-tag fix">fix</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">Vite downgrade to v7 (Node 22.10.0 compatibility)</div>
-          <div class="cl-desc">Vite 8 requires Node ≥22.12.0. Local machine runs Node 22.10.0. Downgraded to Vite 7 which supports Node 20.19+.</div>
+          <div class="bug-title">Runtime error after adding interview time field</div>
+          <div class="bug-cause">Cause: The import line was changed from fmtDate to fmtDateTime, but app.appliedDate in the same component still used fmtDate. TypeScript missed this because the tsc check had already passed before the change.</div>
+          <div class="bug-fix">Fix: Import both fmtDate and fmtDateTime from dates.ts.</div>
         </div>
       </div>
 
-      <div class="changelog-item">
-        <div class="cl-tag fix">fix</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">Removed date-fns from all components</div>
-          <div class="cl-desc">date-fns v4/v3 caused module-level crashes in specific import paths. Replaced all usages with native Intl / toLocaleDateString in a shared dates.ts utility.</div>
+          <div class="bug-title">Adding interview round did not create a notification</div>
+          <div class="bug-cause">Cause: round.controller.ts never imported or called generateNotificationsForApplication. All three round operations (add, update, delete) had no notification side effects.</div>
+          <div class="bug-fix">Fix: Added generateNotificationsForApplication call in addRound, updateRound, and deleteRound controllers.</div>
         </div>
       </div>
 
-      <div class="changelog-item">
-        <div class="cl-tag infra">infra</div>
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
         <div>
-          <div class="cl-title">Added .npmrc (legacy-peer-deps) to frontend and backend</div>
-          <div class="cl-desc">Vercel and Render run plain npm install which fails on peer dependency conflicts (eslint, multer-storage-cloudinary). .npmrc with legacy-peer-deps=true fixes this without --force.</div>
+          <div class="bug-title">salaryMax still present throughout codebase</div>
+          <div class="bug-cause">Cause: UI was simplified to a single Salary field (salaryMin only), but salaryMax was never removed from Zod schema, create/update controllers, stats controller, frontend types, and SalaryChart.</div>
+          <div class="bug-fix">Fix: Removed salaryMax from all locations. Changed SalaryChart to use min only. Updated Stats type.</div>
+        </div>
+      </div>
+
+      <div class="bug-item">
+        <div class="bug-tag fix">fix</div>
+        <div>
+          <div class="bug-title">StatusSelect crash — "statuses is not defined"</div>
+          <div class="bug-cause">Cause: When adding the archive feature, the <code>statuses</code> array was split into <code>activeStatuses</code> and <code>archivedStatuses</code> for the filter dropdown. But <code>StatusSelect</code> (the inline dropdown in each table row) still referenced the old <code>statuses</code> variable, which no longer existed. TypeScript did not catch it because the variable had been module-scoped and tsc was satisfied.</div>
+          <div class="bug-fix">Fix: Added <code>allStatuses = [...activeStatuses, ...archivedStatuses]</code> and used that in StatusSelect so all 7 statuses remain selectable, including moving an archived app back to an active status.</div>
+        </div>
+      </div>
+
+      <div class="bug-item">
+        <div class="bug-tag infra">infra</div>
+        <div>
+          <div class="bug-title">Port 3001 EADDRINUSE on backend restart</div>
+          <div class="bug-cause">Cause: ts-node-dev auto-restart after prisma generate clashed with itself, or a previous process was not cleaned up.</div>
+          <div class="bug-fix">Fix: Added a <code>predev</code> script to backend/package.json — <code>lsof -ti:3001 | xargs kill -9 2&gt;/dev/null || true</code> — which automatically clears the port before every <code>npm run dev</code>.</div>
         </div>
       </div>
 

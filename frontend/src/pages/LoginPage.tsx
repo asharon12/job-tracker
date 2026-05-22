@@ -25,23 +25,23 @@ export default function LoginPage() {
     }
   };
 
-  const inputCls = 'w-full bg-[#0f1117] border border-[#2e3248] rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#8b90a7] focus:outline-none focus:border-[#6c63ff] transition-colors';
+  const inputCls = 'w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[#6c63ff] transition-colors';
 
   return (
-    <div className="min-h-screen bg-[#0f1117] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[var(--bg-base)] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-white">JobTracker</h1>
-          <p className="text-[#8b90a7] text-sm mt-1">Sign in to your account</p>
+          <h1 className="text-2xl font-bold text-[var(--text)]">JobTracker</h1>
+          <p className="text-[var(--text-muted)] text-sm mt-1">Sign in to your account</p>
         </div>
-        <div className="bg-[#1a1d27] border border-[#2e3248] rounded-2xl p-6">
+        <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-[#8b90a7] mb-1">Email</label>
+              <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">Email</label>
               <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required className={inputCls} placeholder="you@example.com" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#8b90a7] mb-1">Password</label>
+              <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">Password</label>
               <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required className={inputCls} placeholder="••••••••" />
             </div>
             {error && <p className="text-red-400 text-xs">{error}</p>}
@@ -50,7 +50,7 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
-        <p className="text-center text-sm text-[#8b90a7] mt-4">
+        <p className="text-center text-sm text-[var(--text-muted)] mt-4">
           Don't have an account?{' '}
           <Link to="/register" className="text-[#6c63ff] hover:underline">Create one</Link>
         </p>

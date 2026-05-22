@@ -10,8 +10,10 @@ import DashboardPage from './pages/DashboardPage';
 import ApplicationsPage from './pages/ApplicationsPage';
 import CalendarPage from './pages/CalendarPage';
 import ResumesPage from './pages/ResumesPage';
+import NotificationsPage from './pages/NotificationsPage';
 import Sidebar from './components/layout/Sidebar';
 import Navbar from './components/layout/Navbar';
+import BottomNav from './components/layout/BottomNav';
 
 const qc = new QueryClient();
 
@@ -39,10 +41,11 @@ function ProtectedLayout() {
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6">
           <Outlet />
         </main>
       </div>
+      <BottomNav />
     </div>
   );
 }
@@ -62,6 +65,7 @@ export default function App() {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/applications" element={<ApplicationsPage />} />
               <Route path="/calendar" element={<CalendarPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
               <Route path="/resumes" element={<ResumesPage />} />
             </Route>
             <Route path="*" element={<Navigate to={token ? '/dashboard' : '/login'} replace />} />

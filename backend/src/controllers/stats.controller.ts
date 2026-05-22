@@ -8,7 +8,6 @@ export const getStats = async (req: AuthRequest, res: Response): Promise<void> =
     select: {
       status: true,
       salaryMin: true,
-      salaryMax: true,
       salaryCurrency: true,
       createdAt: true,
     },
@@ -16,6 +15,7 @@ export const getStats = async (req: AuthRequest, res: Response): Promise<void> =
 
   const pipeline = {
     APPLIED: 0,
+    AWAITING_REFERRAL: 0,
     SCREENING: 0,
     INTERVIEW: 0,
     OFFER: 0,
@@ -48,10 +48,9 @@ export const getStats = async (req: AuthRequest, res: Response): Promise<void> =
   });
 
   const salaryApps = applications
-    .filter((a) => a.salaryMin != null || a.salaryMax != null)
+    .filter((a) => a.salaryMin != null)
     .map((a) => ({
       min: a.salaryMin,
-      max: a.salaryMax,
       currency: a.salaryCurrency ?? 'USD',
     }));
 

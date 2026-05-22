@@ -17,7 +17,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <h1 className="text-xl font-bold" style={{ color: 'var(--text)' }}>Dashboard</h1>
       <StatCards stats={stats} />
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <PipelineFunnel stats={stats} />
         <ActivityChart stats={stats} />
       </div>
